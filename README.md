@@ -232,6 +232,7 @@ Read more about Treeware at [](https://treeware.earth)
 ## Credits
 
 John Wyles
+
 All Contributors
 
 ## License
