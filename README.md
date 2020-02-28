@@ -107,7 +107,7 @@ Once you have defined your presenter class you can use it in your controller (or
 
 #### `PostPresenter::make($post)`
 
-The `make` method accepts a single resource as a parameter.  In the majority of cases this will be an Eloquent model but there is no requirement that you pass a model specifically.  For instance you could pass a plain object or an associative array and then within the `values()` method in your presenter use it like so:
+The `make` method accepts a single resource as a parameter.  In the majority of cases this will be an Eloquent model but there is no requirement that you pass a model specifically.  For instance you could pass a some other object or even an associative array and then within the `values()` method in your presenter use it like so:
 
 ```php
     public function values()
@@ -121,7 +121,7 @@ The `make` method accepts a single resource as a parameter.  In the majority of 
 
 #### `PostPresenter::collection($posts)`
 
-The `collection` method accepts an Eloquent collection (or a plain array) of resources as a parameter.  Each member of the collection will be transformed by the presenter as specified.  Again the members of that collection can be Eloquent models, plain objects or arrays.
+The `collection` method accepts an Eloquent collection (or a plain array) of resources as a parameter.  Each member of the collection will be transformed by the presenter as specified.  Again the members of that collection can be Eloquent models, other objects or arrays.
 
 #### `PostPresenter::new()`
 
@@ -157,7 +157,7 @@ The `with` method accepts a closure that takes as it's only argument the resourc
 You may find that there are combinations of presenter values that you use repeatedly throughout your application.  If so, rather than explicitly asking for those particular fields each time you can add a 'preset' to your presenter class and ask for that preset instead:
 
 ```php
-    PostPresenter::make($post)->preview('summary');
+    PostPresenter::make($post)->preset('summary');
 ```
 
 Within your presenter class you should create a method with the name of your preset, prefixed with 'preset'.  Given the example above we would create a method like this:
