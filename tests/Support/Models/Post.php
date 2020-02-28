@@ -8,7 +8,7 @@ class Post extends Model
 {
     protected $guarded = [];
     protected $dates = [
-        'published_at'
+        'published_at',
     ];
 
     public function comments()

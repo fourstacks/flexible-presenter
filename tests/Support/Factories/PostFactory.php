@@ -7,6 +7,6 @@ $factory->define(Post::class, function (Faker\Generator $faker) {
     return [
         'title' => 'foo',
         'body' => 'bar',
-        'published_at' => Carbon::now()
+        'published_at' => Carbon::now(),
     ];
 });
