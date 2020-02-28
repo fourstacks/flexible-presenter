@@ -1,7 +1,7 @@
 # Flexible Presenter
 
 ![Latest Version on Packagist](https://img.shields.io/packagist/v/AdditionApps/flexible-presenter)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/AdditionApps/flexible-presenter/run-php-tests?label=Tests)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/AdditionApps/flexible-presenter/Run%20tests?label=Tests)
 
 **Easily define just the right data for your InertiaJS views (or anywhere else you want to, uh, flexibly present).**
 
