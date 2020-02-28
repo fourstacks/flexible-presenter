@@ -2,33 +2,33 @@
 
 namespace AdditionApps\FlexiblePresenter;
 
-use AdditionApps\FlexiblePresenter\Contracts\FlexiblePresenterContract;
-use AdditionApps\FlexiblePresenter\Exceptions\InvalidPresenterKeys;
-use AdditionApps\FlexiblePresenter\Exceptions\InvalidPresenterPreset;
 use Closure;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Http\Resources\DelegatesToResource;
+use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Str;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Http\Resources\DelegatesToResource;
+use AdditionApps\FlexiblePresenter\Exceptions\InvalidPresenterKeys;
+use AdditionApps\FlexiblePresenter\Exceptions\InvalidPresenterPreset;
+use AdditionApps\FlexiblePresenter\Contracts\FlexiblePresenterContract;
 
 abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
 {
     use DelegatesToResource;
 
-    /** @var \Illuminate\Support\Collection  */
+    /** @var \Illuminate\Support\Collection */
     public $collection;
 
     /** @var mixed */
     public $resource;
 
-    /** @var array  */
+    /** @var array */
     public $only = [];
 
-    /** @var array  */
+    /** @var array */
     public $except = [];
 
-    /** @var array  */
+    /** @var array */
     public $with = [];
 
     /** @var callable|null */
@@ -36,10 +36,9 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
 
     public function __construct($data = null)
     {
-        if($data instanceof Collection){
+        if ($data instanceof Collection) {
             $this->collection = $data;
-        }
-        else {
+        } else {
             $this->resource = $data;
         }
     }
@@ -61,10 +60,9 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
 
     public function with(callable $callback): self
     {
-        if($this->resource){
+        if ($this->resource) {
             $this->with = $callback($this->resource);
-        }
-        else {
+        } else {
             $this->withCallback = $callback;
         }
 
@@ -87,7 +85,7 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
 
     public function lazy($expression)
     {
-        return function() use ($expression){
+        return function () use ($expression) {
             return $expression;
         };
     }
@@ -95,14 +93,14 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
     public function all(): array
     {
         return collect($this->values())
-            ->mapWithKeys(function($value, $key){
+            ->mapWithKeys(function ($value, $key) {
                 return [
-                    $key => ($value instanceof Closure) ? App::call($value) : $value
+                    $key => ($value instanceof Closure) ? App::call($value) : $value,
                 ];
             })
-            ->mapWithKeys(function($value, $key){
+            ->mapWithKeys(function ($value, $key) {
                 return [
-                    $key => ($value instanceof Arrayable) ? $value->toArray() : $value
+                    $key => ($value instanceof Arrayable) ? $value->toArray() : $value,
                 ];
             })
             ->all();
@@ -112,7 +110,7 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
     {
         $method = Str::start(ucfirst($name), 'preset');
 
-        if(method_exists($this, $method)){
+        if (method_exists($this, $method)) {
             return $this->$method();
         }
 
@@ -121,32 +119,32 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
 
     public function get(): array
     {
-        if($this->collection){
+        if ($this->collection) {
             return $this->buildCollection();
         }
 
         $this->validateKeys();
 
         return collect($this->values())
-            ->filter(function($value, $key){
+            ->filter(function ($value, $key) {
                 return empty($this->only)
                     ? true
                     : in_array($key, $this->only);
             })
-            ->reject(function($value, $key){
+            ->reject(function ($value, $key) {
                 return empty($this->except)
                     ? false
                     : in_array($key, $this->except);
             })
             ->merge($this->with)
-            ->mapWithKeys(function($value, $key){
+            ->mapWithKeys(function ($value, $key) {
                 return [
-                    $key => ($value instanceof Closure) ? App::call($value) : $value
+                    $key => ($value instanceof Closure) ? App::call($value) : $value,
                 ];
             })
-            ->mapWithKeys(function($value, $key){
+            ->mapWithKeys(function ($value, $key) {
                 return [
-                    $key => ($value instanceof Arrayable) ? $value->toArray() : $value
+                    $key => ($value instanceof Arrayable) ? $value->toArray() : $value,
                 ];
             })
             ->all();
@@ -160,11 +158,11 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
     protected function buildCollection(): array
     {
         return $this->collection
-            ->map(function($resource){
+            ->map(function ($resource) {
                 $presenter = new static($resource);
                 $presenter->only = $this->only;
                 $presenter->except = $this->except;
-                if($this->withCallback){
+                if ($this->withCallback) {
                     $presenter->with($this->withCallback);
                 }
 
@@ -186,8 +184,7 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
 
     protected function allKeysAreValid($method, $validKeys): void
     {
-        if(count($invalidKeys = array_diff($this->{$method}, $validKeys)))
-        {
+        if (count($invalidKeys = array_diff($this->{$method}, $validKeys))) {
             throw InvalidPresenterKeys::keysNotDefined($invalidKeys, $method);
         }
     }

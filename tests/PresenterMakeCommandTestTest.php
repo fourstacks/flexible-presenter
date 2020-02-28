@@ -6,11 +6,9 @@ use Illuminate\Support\Facades\File;
 
 class PresenterMakeCommandTestTest extends TestCase
 {
-
     /** @test */
     public function it_can_create_a_presenter_class()
     {
-
         $this->artisan('make:presenter', [
             'name' => 'PostPresenter',
             '--force' => true,
@@ -49,5 +47,4 @@ class PresenterMakeCommandTestTest extends TestCase
 
         $this->assertStringContainsString('class PostPresenter extends FlexiblePresenter', $contents);
     }
-
 }

@@ -2,27 +2,26 @@
 
 namespace AdditionApps\FlexiblePresenter\Tests;
 
-use AdditionApps\FlexiblePresenter\FlexiblePresenterServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
-use Orchestra\Database\ConsoleServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
+use AdditionApps\FlexiblePresenter\FlexiblePresenterServiceProvider;
 
 abstract class TestCase extends Orchestra
 {
     protected $basePath;
 
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
-        $this->basePath = realpath(__DIR__ .'/..');
-        $this->withFactories($this->basePath . '/tests/Support/Factories');
+        $this->basePath = realpath(__DIR__.'/..');
+        $this->withFactories($this->basePath.'/tests/Support/Factories');
         $this->setUpDatabase($this->app);
     }
 
     protected function getPackageProviders($app): array
     {
         return [
-            FlexiblePresenterServiceProvider::class
+            FlexiblePresenterServiceProvider::class,
         ];
     }
 
@@ -59,5 +58,4 @@ abstract class TestCase extends Orchestra
                 $table->timestamps();
             });
     }
-
 }

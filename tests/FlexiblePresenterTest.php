@@ -2,18 +2,17 @@
 
 namespace AdditionApps\FlexiblePresenter\Tests;
 
-use AdditionApps\FlexiblePresenter\Exceptions\InvalidPresenterKeys;
-use AdditionApps\FlexiblePresenter\FlexiblePresenter;
-use AdditionApps\FlexiblePresenter\Tests\Support\Models\Comment;
-use AdditionApps\FlexiblePresenter\Tests\Support\Models\Post;
-use AdditionApps\FlexiblePresenter\Tests\Support\Presenters\CommentPresenter;
-use AdditionApps\FlexiblePresenter\Tests\Support\Presenters\PostPresenter;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use AdditionApps\FlexiblePresenter\FlexiblePresenter;
+use AdditionApps\FlexiblePresenter\Tests\Support\Models\Post;
+use AdditionApps\FlexiblePresenter\Tests\Support\Models\Comment;
+use AdditionApps\FlexiblePresenter\Exceptions\InvalidPresenterKeys;
+use AdditionApps\FlexiblePresenter\Tests\Support\Presenters\PostPresenter;
+use AdditionApps\FlexiblePresenter\Tests\Support\Presenters\CommentPresenter;
 
 class FlexiblePresenterTest extends TestCase
 {
-
     public function setUp(): void
     {
         parent::setUp();
@@ -59,7 +58,7 @@ class FlexiblePresenterTest extends TestCase
         $post = $this->createPostAndComments();
 
         $return = PostPresenter::make($post)
-            ->with(function($post) {
+            ->with(function ($post) {
                 return ['new_key' => 'foo'];
             })
             ->get();
@@ -80,7 +79,7 @@ class FlexiblePresenterTest extends TestCase
         $post = $this->createPostAndComments();
 
         $return = PostPresenter::make($post)
-            ->with(function($post) {
+            ->with(function ($post) {
                 return ['published_at' => $post->published_at->toDayDateTimeString()];
             })
             ->get();
@@ -90,7 +89,7 @@ class FlexiblePresenterTest extends TestCase
             'title' => $post->title,
             'body' => $post->body,
             'published_at' => $post->published_at->toDayDateTimeString(),
-            'comment_count' => 3
+            'comment_count' => 3,
         ], $return);
     }
 
@@ -125,7 +124,7 @@ class FlexiblePresenterTest extends TestCase
 
         $this->assertEquals([
             'id' => $post->id,
-            'title' => $post->title
+            'title' => $post->title,
         ], $usingStringsReturn);
 
         $usingArrayReturn = $presenter
@@ -192,7 +191,7 @@ class FlexiblePresenterTest extends TestCase
 
         $this->assertEquals([
             'title' => $post->title,
-            'body' => $post->body
+            'body' => $post->body,
         ], $return);
     }
 
@@ -224,7 +223,7 @@ class FlexiblePresenterTest extends TestCase
         $return = PostPresenter::collection($posts)->only('id')->get();
 
         $this->assertEquals([
-            ['id' => 1], ['id' => 2], ['id' => 3]
+            ['id' => 1], ['id' => 2], ['id' => 3],
         ], $return);
     }
 
@@ -233,9 +232,9 @@ class FlexiblePresenterTest extends TestCase
     {
         $post = $this->createPostAndComments();
 
-        $return = PostPresenter::make($post)->only('title')->with(function($post){
+        $return = PostPresenter::make($post)->only('title')->with(function ($post) {
             return [
-                'comments' => CommentPresenter::collection($post->comments)->only('id')
+                'comments' => CommentPresenter::collection($post->comments)->only('id'),
             ];
         })->get();
 
@@ -245,14 +244,14 @@ class FlexiblePresenterTest extends TestCase
                 ['id' => 1],
                 ['id' => 2],
                 ['id' => 3],
-            ]
+            ],
         ], $return);
     }
 
     private function createPostAndComments()
     {
         $post = factory(Post::class)->create();
-        factory(Comment::class, 3)->create([ 'post_id' => $post->id ]);
+        factory(Comment::class, 3)->create(['post_id' => $post->id]);
 
         return $post;
     }
