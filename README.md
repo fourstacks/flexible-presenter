@@ -1,5 +1,8 @@
 # Flexible Presenter
 
+![Latest Version on Packagist](https://img.shields.io/packagist/v/AdditionApps/flexible-presenter)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/AdditionApps/flexible-presenter/run-php-tests?label=Tests)
+
 **Easily define just the right data for your InertiaJS views (or anywhere else you want to, uh, flexibly present).**
 
 This package allows you to define presenter classes that take logic involved in getting data ready for your view layer out of your controller.  It also provides an expressive, fluent API that allows you to modify and reuse your presenters on the fly so that you're only ever providing relevant data.  
