@@ -6,7 +6,6 @@ use AdditionApps\FlexiblePresenter\FlexiblePresenter;
 
 class CommentPresenter extends FlexiblePresenter
 {
-
     public function values(): array
     {
         return [

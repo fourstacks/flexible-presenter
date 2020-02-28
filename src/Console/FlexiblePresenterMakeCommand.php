@@ -1,11 +1,9 @@
 <?php
 
-
 namespace AdditionApps\FlexiblePresenter\Console;
 
-
-use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Str;
+use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputOption;
 
 class FlexiblePresenterMakeCommand extends GeneratorCommand
@@ -50,5 +48,4 @@ class FlexiblePresenterMakeCommand extends GeneratorCommand
     {
         return Str::contains($this->argument('name'), '/');
     }
-
 }

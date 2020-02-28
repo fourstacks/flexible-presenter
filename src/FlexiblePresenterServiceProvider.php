@@ -2,8 +2,8 @@
 
 namespace AdditionApps\FlexiblePresenter;
 
-use AdditionApps\FlexiblePresenter\Console\FlexiblePresenterMakeCommand;
 use Illuminate\Support\ServiceProvider;
+use AdditionApps\FlexiblePresenter\Console\FlexiblePresenterMakeCommand;
 
 class FlexiblePresenterServiceProvider extends ServiceProvider
 {
@@ -15,5 +15,4 @@ class FlexiblePresenterServiceProvider extends ServiceProvider
             ]);
         }
     }
-
 }
