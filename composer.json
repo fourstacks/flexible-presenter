@@ -1,0 +1,40 @@
+{
+    "name": "additionapps/flexible-presenter",
+    "description": "Easily define just the right data for your InertiaJS views",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Addition",
+            "email": "info@addition.com.au"
+        }
+    ],
+    "require": {
+        "php": ">=7.2.0",
+        "illuminate/support": "~6.0"
+    },
+    "require-dev": {
+        "fzaninotto/faker": "^1.8",
+        "orchestra/testbench": "^4.6",
+        "phpunit/phpunit": "~8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "AdditionApps\\FlexiblePresenter\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AdditionApps\\FlexiblePresenter\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "AdditionApps\\FlexiblePresenter\\FlexiblePresenterServiceProvider"
+            ]
+        }
+    }
+}

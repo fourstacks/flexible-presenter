@@ -1,0 +1,15 @@
+<?php
+
+namespace DummyNamespace;
+
+use AdditionApps\FlexiblePresenter\FlexiblePresenter;
+
+class DummyClass extends FlexiblePresenter
+{
+    public function values(): array
+    {
+        return [
+            // 'id' => $this->resource->id
+        ];
+    }
+}
