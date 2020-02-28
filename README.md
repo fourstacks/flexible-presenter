@@ -2,6 +2,7 @@
 
 ![Latest Version on Packagist](https://img.shields.io/packagist/v/AdditionApps/flexible-presenter)
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/AdditionApps/flexible-presenter/Run%20tests?label=Tests)
+[![StyleCI](https://github.styleci.io/repos/243743103/shield?branch=master)](https://github.styleci.io/repos/243743103)
 
 **Easily define just the right data for your InertiaJS views (or anywhere else you want to, uh, flexibly present).**
 
