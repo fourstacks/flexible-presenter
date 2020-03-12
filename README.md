@@ -229,7 +229,7 @@ You're free to use this package, but if it makes it to your production environme
 
 It’s now common knowledge that one of the best tools to tackle the climate crisis and keep our temperatures from rising above 1.5C is to plant trees. If you contribute to my forest you’ll be creating employment for local families and restoring wildlife habitats.
 
-You can buy trees at [Offest Earth](https://offset.earth/treeware)
+You can buy trees at [Offset Earth](https://offset.earth/treeware)
 
 Read more about Treeware at [Treeware](https://treeware.earth)
 
