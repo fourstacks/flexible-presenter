@@ -127,6 +127,17 @@ The `collection` method accepts an Eloquent collection (or a plain array) of res
 
 The `new` method accepts no parameters.  This method is useful for when you have no resource or collection to pass into your presenter (perhaps because the presenter itself is responsible for gathering the resources it needs).
 
+If one of your presenters has a key should return a presented relation as a value, you can use the convenience method `whenLoaded` to conditionally include the relation:
+
+```php
+    // In PostPresenter
+   return [
+        'comments' => CommentPresenter::collection($this->whenLoaded('comments')),
+   ];
+```
+
+In the above example the `comments` key will be a collection of presented comments if the relation is loaded and `null` if they are not.
+
 ### Configuring presenters
 
 With a new presenter instance you are now free to configure it in whatever way makes sense for your the current context.  All the following methods can be chained onto `make()`, `collection()` or `new()`.
