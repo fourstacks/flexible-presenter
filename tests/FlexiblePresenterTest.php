@@ -183,6 +183,18 @@ class FlexiblePresenterTest extends TestCase
     }
 
     /** @test */
+    public function null_returned_when_no_resource_passed_to_constructor()
+    {
+        $makeReturn = PostPresenter::make(null)->get();
+
+        $this->assertNull($makeReturn);
+
+        $collectionReturn = PostPresenter::collection(null)->get();
+
+        $this->assertNull($collectionReturn);
+    }
+
+    /** @test */
     public function only_keys_for_preset_are_returned()
     {
         $post = factory(Post::class)->create();
@@ -246,6 +258,28 @@ class FlexiblePresenterTest extends TestCase
                 ['id' => 3],
             ],
         ], $return);
+    }
+
+    /** @test */
+    public function returns_null_if_relation_not_loaded_on_resource()
+    {
+        $post = factory(Post::class)->create();
+
+        $return = PostPresenter::make($post)->preset('conditionalRelations')->get();
+
+        $this->assertNull($return['comments']);
+    }
+
+    /** @test */
+    public function returns_presented_relation_if_loaded_on_resource()
+    {
+        $post = $this->createPostAndComments();
+
+        $post->load('comments');
+
+        $return = PostPresenter::make($post)->preset('conditionalRelations')->get();
+
+        $this->assertCount(3, $return['comments']);
     }
 
     private function createPostAndComments()

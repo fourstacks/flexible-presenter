@@ -13,12 +13,21 @@ class PostPresenter extends FlexiblePresenter
             'title' => $this->title,
             'body' => $this->body,
             'published_at' => $this->published_at->toDateString(),
-            'comment_count' => $this->lazy($this->comments->count()),
+            'comment_count' => $this->lazy($this->comments->count())
         ];
     }
 
     public function presetSummary()
     {
         return $this->only('title', 'body');
+    }
+
+    public function presetConditionalRelations()
+    {
+        return $this->with(function(){
+            return [
+                'comments' => CommentPresenter::collection($this->whenLoaded('comments')),
+            ];
+        });
     }
 }
