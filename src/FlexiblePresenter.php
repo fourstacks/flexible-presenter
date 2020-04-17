@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Http\Resources\DelegatesToResource;
 use AdditionApps\FlexiblePresenter\Exceptions\InvalidPresenterKeys;
 use AdditionApps\FlexiblePresenter\Exceptions\InvalidPresenterPreset;
@@ -18,6 +19,9 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
 
     /** @var \Illuminate\Support\Collection */
     public $collection;
+
+    /** @var \Illuminate\Pagination\AbstractPaginator|\Illuminate\Contracts\Support\Arrayable */
+    public $paginationCollection;
 
     /** @var mixed */
     public $resource;
@@ -38,6 +42,8 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
     {
         if ($data instanceof Collection) {
             $this->collection = $data;
+        } elseif ($data instanceof AbstractPaginator && $data instanceof Arrayable) {
+            $this->paginationCollection = $data;
         } else {
             $this->resource = $data;
         }
@@ -52,6 +58,8 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
     {
         if (is_null($collection)) {
             return new static(null);
+        } elseif ($collection instanceof AbstractPaginator && $collection instanceof Arrayable) {
+            return new static($collection);
         }
 
         return new static(Collection::wrap($collection));
@@ -123,12 +131,14 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
 
     public function get(): ?array
     {
-        if (is_null($this->resource) && is_null($this->collection)) {
+        if (is_null($this->resource) && is_null($this->collection) && is_null($this->paginationCollection)) {
             return null;
         }
 
         if ($this->collection) {
             return $this->buildCollection();
+        } elseif ($this->paginationCollection) {
+            return $this->buildpaginationCollection();
         }
 
         $this->validateKeys();
@@ -174,18 +184,30 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
 
     protected function buildCollection(): array
     {
-        return $this->collection
-            ->map(function ($resource) {
-                $presenter = new static($resource);
-                $presenter->only = $this->only;
-                $presenter->except = $this->except;
-                if ($this->withCallback) {
-                    $presenter->with($this->withCallback);
-                }
+        return $this->mapCollectionResource($this->collection)->all();
+    }
 
-                return $presenter->get();
-            })
-            ->all();
+    protected function buildPaginationCollection(): array
+    {
+        return $this->paginationCollection
+            ->setCollection($this->mapCollectionResource(
+                $this->paginationCollection->getCollection()
+            ))
+            ->toArray();
+    }
+
+    protected function mapCollectionResource(Collection $collection): Collection
+    {
+        return $collection->map(function ($resource) {
+            $presenter = new static($resource);
+            $presenter->only = $this->only;
+            $presenter->except = $this->except;
+            if ($this->withCallback) {
+                $presenter->with($this->withCallback);
+            }
+
+            return $presenter->get();
+        });
     }
 
     protected function validateKeys(): void
