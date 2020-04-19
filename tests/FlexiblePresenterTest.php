@@ -2,16 +2,16 @@
 
 namespace AdditionApps\FlexiblePresenter\Tests;
 
-use AdditionApps\FlexiblePresenter\Exceptions\InvalidPresenterKeys;
-use AdditionApps\FlexiblePresenter\FlexiblePresenter;
-use AdditionApps\FlexiblePresenter\Tests\Support\Models\Comment;
-use AdditionApps\FlexiblePresenter\Tests\Support\Models\Post;
-use AdditionApps\FlexiblePresenter\Tests\Support\Presenters\CommentPresenter;
-use AdditionApps\FlexiblePresenter\Tests\Support\Presenters\PostPresenter;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
+use AdditionApps\FlexiblePresenter\FlexiblePresenter;
+use AdditionApps\FlexiblePresenter\Tests\Support\Models\Post;
+use AdditionApps\FlexiblePresenter\Tests\Support\Models\Comment;
+use AdditionApps\FlexiblePresenter\Exceptions\InvalidPresenterKeys;
+use AdditionApps\FlexiblePresenter\Tests\Support\Presenters\PostPresenter;
+use AdditionApps\FlexiblePresenter\Tests\Support\Presenters\CommentPresenter;
 
 class FlexiblePresenterTest extends TestCase
 {
@@ -103,7 +103,7 @@ class FlexiblePresenterTest extends TestCase
         $post = $this->createPostAndComments();
 
         $return = PostPresenter::make($post)
-            ->with(function($post) {
+            ->with(function ($post) {
                 return ['new_key' => 'foo'];
             })
             ->get();
@@ -124,7 +124,7 @@ class FlexiblePresenterTest extends TestCase
         $post = $this->createPostAndComments();
 
         $return = PostPresenter::make($post)
-            ->with(function($post) {
+            ->with(function ($post) {
                 return ['published_at' => $post->published_at->toDayDateTimeString()];
             })
             ->get();
@@ -357,7 +357,7 @@ class FlexiblePresenterTest extends TestCase
     {
         $post = $this->createPostAndComments();
 
-        $return = PostPresenter::make($post)->only('title')->with(function($post) {
+        $return = PostPresenter::make($post)->only('title')->with(function ($post) {
             return [
                 'comments' => CommentPresenter::collection($post->comments)->only('id'),
             ];

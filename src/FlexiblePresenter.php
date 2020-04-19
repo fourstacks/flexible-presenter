@@ -2,16 +2,16 @@
 
 namespace AdditionApps\FlexiblePresenter;
 
-use AdditionApps\FlexiblePresenter\Contracts\FlexiblePresenterContract;
-use AdditionApps\FlexiblePresenter\Exceptions\InvalidPresenterKeys;
-use AdditionApps\FlexiblePresenter\Exceptions\InvalidPresenterPreset;
 use Closure;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Http\Resources\DelegatesToResource;
-use Illuminate\Pagination\AbstractPaginator;
+use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Str;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Pagination\AbstractPaginator;
+use Illuminate\Http\Resources\DelegatesToResource;
+use AdditionApps\FlexiblePresenter\Exceptions\InvalidPresenterKeys;
+use AdditionApps\FlexiblePresenter\Exceptions\InvalidPresenterPreset;
+use AdditionApps\FlexiblePresenter\Contracts\FlexiblePresenterContract;
 
 abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
 {
@@ -97,7 +97,7 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
 
     public function lazy($expression)
     {
-        return function() use ($expression) {
+        return function () use ($expression) {
             return $expression;
         };
     }
@@ -105,12 +105,12 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
     public function all(): array
     {
         return collect($this->values())
-            ->mapWithKeys(function($value, $key) {
+            ->mapWithKeys(function ($value, $key) {
                 return [
                     $key => ($value instanceof Closure) ? App::call($value) : $value,
                 ];
             })
-            ->mapWithKeys(function($value, $key) {
+            ->mapWithKeys(function ($value, $key) {
                 return [
                     $key => ($value instanceof Arrayable) ? $value->toArray() : $value,
                 ];
@@ -144,23 +144,23 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
         $this->validateKeys();
 
         return collect($this->values())
-            ->filter(function($value, $key) {
+            ->filter(function ($value, $key) {
                 return empty($this->only)
                     ? true
                     : in_array($key, $this->only);
             })
-            ->reject(function($value, $key) {
+            ->reject(function ($value, $key) {
                 return empty($this->except)
                     ? false
                     : in_array($key, $this->except);
             })
             ->merge($this->with)
-            ->mapWithKeys(function($value, $key) {
+            ->mapWithKeys(function ($value, $key) {
                 return [
                     $key => ($value instanceof Closure) ? App::call($value) : $value,
                 ];
             })
-            ->mapWithKeys(function($value, $key) {
+            ->mapWithKeys(function ($value, $key) {
                 return [
                     $key => ($value instanceof Arrayable) ? $value->toArray() : $value,
                 ];
@@ -175,8 +175,8 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
 
     public function whenLoaded(string $relationship)
     {
-        if (!$this->resource->relationLoaded($relationship)) {
-            return null;
+        if (! $this->resource->relationLoaded($relationship)) {
+            return;
         }
 
         return $this->resource->{$relationship};
@@ -205,7 +205,7 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
 
     protected function mapCollectionResource(Collection $collection): Collection
     {
-        return $collection->map(function($resource) {
+        return $collection->map(function ($resource) {
             $presenter = new static($resource);
             $presenter->only = $this->only;
             $presenter->except = $this->except;
