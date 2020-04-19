@@ -131,14 +131,14 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
 
     public function get(): ?array
     {
-        if (is_null($this->resource) && is_null($this->collection) && is_null($this->paginationCollection)) {
+        if ($this->noResourceSpecified()) {
             return null;
         }
 
         if ($this->collection) {
             return $this->buildCollection();
         } elseif ($this->paginationCollection) {
-            return $this->buildpaginationCollection();
+            return $this->buildPaginationCollection();
         }
 
         $this->validateKeys();
@@ -176,10 +176,17 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
     public function whenLoaded(string $relationship)
     {
         if (! $this->resource->relationLoaded($relationship)) {
-            return;
+            return null;
         }
 
         return $this->resource->{$relationship};
+    }
+
+    protected function noResourceSpecified()
+    {
+        return is_null($this->resource)
+            && is_null($this->collection)
+            && is_null($this->paginationCollection);
     }
 
     protected function buildCollection(): array

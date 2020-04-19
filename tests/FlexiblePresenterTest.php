@@ -69,7 +69,7 @@ class FlexiblePresenterTest extends TestCase
         );
 
         $presenter = PostPresenter::collection($paginationCollection);
-
+        
         $this->assertInstanceOf(FlexiblePresenter::class, $presenter);
         $this->assertInstanceOf(Paginator::class, $presenter->paginationCollection);
         $this->assertCount(2, $presenter->paginationCollection->getCollection());
