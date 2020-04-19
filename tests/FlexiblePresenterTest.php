@@ -4,6 +4,8 @@ namespace AdditionApps\FlexiblePresenter\Tests;
 
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 use AdditionApps\FlexiblePresenter\FlexiblePresenter;
 use AdditionApps\FlexiblePresenter\Tests\Support\Models\Post;
 use AdditionApps\FlexiblePresenter\Tests\Support\Models\Comment;
@@ -50,6 +52,49 @@ class FlexiblePresenterTest extends TestCase
         $this->assertInstanceOf(FlexiblePresenter::class, $presenter);
         $this->assertNull($presenter->resource);
         $this->assertNull($presenter->collection);
+    }
+
+    /** @test */
+    public function new_presenter_instance_instantiated_input_paginator()
+    {
+        $currentPage = 1;
+        $perPage = 2;
+
+        $posts = factory(Post::class, 3)->create();
+
+        $paginationCollection = new Paginator(
+            $posts->forPage($currentPage, $perPage),
+            $perPage,
+            $currentPage
+        );
+
+        $presenter = PostPresenter::collection($paginationCollection);
+
+        $this->assertInstanceOf(FlexiblePresenter::class, $presenter);
+        $this->assertInstanceOf(Paginator::class, $presenter->paginationCollection);
+        $this->assertCount(2, $presenter->paginationCollection->getCollection());
+    }
+
+    /** @test */
+    public function new_presenter_instance_instantiated_input_length_aware_paginator()
+    {
+        $currentPage = 1;
+        $perPage = 2;
+
+        $posts = factory(Post::class, 3)->create();
+
+        $paginationCollection = new LengthAwarePaginator(
+            $posts->forPage($currentPage, $perPage),
+            $posts->count(),
+            $perPage,
+            $currentPage
+        );
+
+        $presenter = PostPresenter::collection($paginationCollection);
+
+        $this->assertInstanceOf(FlexiblePresenter::class, $presenter);
+        $this->assertInstanceOf(LengthAwarePaginator::class, $presenter->paginationCollection);
+        $this->assertCount(2, $presenter->paginationCollection->getCollection());
     }
 
     /** @test */
@@ -236,6 +281,74 @@ class FlexiblePresenterTest extends TestCase
 
         $this->assertEquals([
             ['id' => 1], ['id' => 2], ['id' => 3],
+        ], $return);
+    }
+
+    /** @test */
+    public function paginator_collection_of_models_are_presented()
+    {
+        $currentPage = 1;
+        $perPage = 2;
+
+        $posts = factory(Post::class, 3)->create();
+
+        $paginationCollection = new Paginator(
+            $posts->forPage($currentPage, $perPage),
+            $perPage,
+            $currentPage
+        );
+
+        $return = PostPresenter::collection($paginationCollection)->only('id')->get();
+
+        $this->assertEquals([
+            'current_page' => 1,
+            'data' => [
+                ['id' => 1],
+                ['id' => 2],
+            ],
+            'first_page_url' => '/?page=1',
+            'from' => 1,
+            'next_page_url' => null,
+            'path' => '/',
+            'per_page' => 2,
+            'prev_page_url' => null,
+            'to' => 2,
+        ], $return);
+    }
+
+    /** @test */
+    public function length_aware_paginator_collection_of_models_are_presented()
+    {
+        $currentPage = 1;
+        $perPage = 2;
+
+        $posts = factory(Post::class, 3)->create();
+
+        $paginationCollection = new LengthAwarePaginator(
+            $posts->forPage($currentPage, $perPage),
+            $posts->count(),
+            $perPage,
+            $currentPage
+        );
+
+        $return = PostPresenter::collection($paginationCollection)->only('id')->get();
+
+        $this->assertEquals([
+            'current_page' => 1,
+            'data' => [
+                ['id' => 1],
+                ['id' => 2],
+            ],
+            'first_page_url' => '/?page=1',
+            'from' => 1,
+            'last_page' => 2,
+            'last_page_url' => '/?page=2',
+            'next_page_url' => '/?page=2',
+            'path' => '/',
+            'per_page' => 2,
+            'prev_page_url' => null,
+            'to' => 2,
+            'total' => 3,
         ], $return);
     }
 

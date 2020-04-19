@@ -10,6 +10,7 @@
     ],
     "require": {
         "php": "^7.2.5",
+        "illuminate/pagination": "^6.0|^7.0",
         "illuminate/support": "^6.0|^7.0"
     },
     "require-dev": {
