@@ -123,6 +123,41 @@ The `make` method accepts a single resource as a parameter.  In the majority of 
 
 The `collection` method accepts an Eloquent collection (or a plain array) of resources as a parameter.  Each member of the collection will be transformed by the presenter as specified.  Again the members of that collection can be Eloquent models, other objects or arrays.
 
+As well as passing an Eloquent collection or array, you can also pass a Laravel paginator instance.  You are free to pass an instance of either `Illuminate\Pagination\Paginator` or `Illuminate\Pagination\LengthAwarePaginator`. You can also pass a custom paginator as long as it extends the `Illuminate\Pagination\AbstractPaginator` class and implements the `Illuminate\Contracts\SupportArrayable` interface.  
+
+Here's an example of a presenter used with an eloquent collection using simple pagination: 
+
+```php
+$posts = PostPresenter::collection(Post::simplePaginate())
+    ->only('id', 'title')
+    ->get();
+```
+
+Which will output:
+
+```php
+[
+    'current_page' => 1,
+    'data' => [
+        [
+            'id' => 1,
+            'title' => 'foo',
+        ],
+        [
+             'id' => 2,
+             'title' => 'foo',
+        ],
+    ],
+    'first_page_url' => '/?page=1',
+    'from' => 1,
+    'next_page_url' => null,
+    'path' => '/',
+    'per_page' => 2,
+    'prev_page_url' => null,
+    'to' => 2,
+];
+```
+
 #### `PostPresenter::new()`
 
 The `new` method accepts no parameters.  This method is useful for when you have no resource or collection to pass into your presenter (perhaps because the presenter itself is responsible for gathering the resources it needs).
