@@ -55,7 +55,7 @@ This presenter will have the App\Blog\Presenters namespace and will be saved in 
 
 ### Defining values
 
-The only required method in a presenter class is `values()` which should should return an array with **all** the possible fields you might want to display in a view.  These could simply be values directly on your model (as in the example above).  Note that you can access model properties directly from the `$this` variable, just as you can when using [Laravel API Resources](https://laravel.com/docs/6.x/eloquent-resources). 
+The only required method in a presenter class is `values()` which should return an array with **all** the possible fields you might want to display in a view.  These could simply be values directly on your model (as in the example above).  Note that you can access model properties directly from the `$this` variable, just as you can when using [Laravel API Resources](https://laravel.com/docs/6.x/eloquent-resources). 
 
 ### Lazy evaluation
 
