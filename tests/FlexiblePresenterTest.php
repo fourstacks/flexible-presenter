@@ -2,7 +2,6 @@
 
 namespace AdditionApps\FlexiblePresenter\Tests;
 
-use AdditionApps\FlexiblePresenter\Tests\Support\Presenters\StandalonePresenter;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Pagination\Paginator;
@@ -13,6 +12,7 @@ use AdditionApps\FlexiblePresenter\Tests\Support\Models\Comment;
 use AdditionApps\FlexiblePresenter\Exceptions\InvalidPresenterKeys;
 use AdditionApps\FlexiblePresenter\Tests\Support\Presenters\PostPresenter;
 use AdditionApps\FlexiblePresenter\Tests\Support\Presenters\CommentPresenter;
+use AdditionApps\FlexiblePresenter\Tests\Support\Presenters\StandalonePresenter;
 
 class FlexiblePresenterTest extends TestCase
 {
