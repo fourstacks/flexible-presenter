@@ -38,9 +38,14 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
     /** @var callable|null */
     protected $withCallback;
 
+    /** @var bool */
+    protected $withoutResource = false;
+
     public function __construct($data = null)
     {
-        if ($data instanceof Collection) {
+        if ($data instanceof NoSpecifiedResource) {
+            $this->withoutResource = true;
+        } elseif ($data instanceof Collection) {
             $this->collection = $data;
         } elseif ($data instanceof AbstractPaginator && $data instanceof Arrayable) {
             $this->paginationCollection = $data;
@@ -67,7 +72,7 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
 
     public static function new()
     {
-        return new static();
+        return new static(new NoSpecifiedResource());
     }
 
     public function with(callable $callback): self
@@ -184,7 +189,8 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
 
     protected function noResourceSpecified()
     {
-        return is_null($this->resource)
+        return $this->withoutResource === false
+            && is_null($this->resource)
             && is_null($this->collection)
             && is_null($this->paginationCollection);
     }

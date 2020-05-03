@@ -2,6 +2,7 @@
 
 namespace AdditionApps\FlexiblePresenter\Tests;
 
+use AdditionApps\FlexiblePresenter\Tests\Support\Presenters\StandalonePresenter;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Pagination\Paginator;
@@ -47,11 +48,13 @@ class FlexiblePresenterTest extends TestCase
     /** @test */
     public function new_presenter_instance_instantiated_with_new_method()
     {
-        $presenter = PostPresenter::new();
+        $presenter = StandalonePresenter::new();
 
         $this->assertInstanceOf(FlexiblePresenter::class, $presenter);
         $this->assertNull($presenter->resource);
         $this->assertNull($presenter->collection);
+
+        $this->assertEquals(['foo' => 'bar'], $presenter->toArray());
     }
 
     /** @test */
