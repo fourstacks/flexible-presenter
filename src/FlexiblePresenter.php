@@ -35,11 +35,15 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
     /** @var array */
     public $with = [];
 
+    /** @var array */
+    public $appends = [];
+
     /** @var callable|null */
     protected $withCallback;
 
     /** @var bool */
     protected $withoutResource = false;
+
 
     public function __construct($data = null)
     {
@@ -134,6 +138,12 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
         throw InvalidPresenterPreset::methodNotFound($method);
     }
 
+    public function appends(array $values = []){
+        $this->appends = $values;
+
+        return $this;
+    }
+
     public function get(): ?array
     {
         if ($this->noResourceSpecified()) {
@@ -202,11 +212,15 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
 
     protected function buildPaginationCollection(): array
     {
-        return $this->paginationCollection
+        $paginatedResources = $this->paginationCollection
             ->setCollection($this->mapCollectionResource(
                 $this->paginationCollection->getCollection()
             ))
             ->toArray();
+
+        return collect($paginatedResources)
+            ->mergeRecursive($this->appends)
+            ->all();
     }
 
     protected function mapCollectionResource(Collection $collection): Collection

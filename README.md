@@ -73,11 +73,11 @@ You can also define fields that are computed in more complex ways - for example 
     }
 ```
 
-For convenience, and to make things a little more readable, there is a `lazy` function which will do the same thing under the hood:
+If you are using PHP >= 7.4 you can make things a little more readable by using the new short closure syntax:
 
 ```php
     [
-        'comment_count' => $this->lazy($this->comments->count())
+        'comment_count' => fn() => $this->comments->count()
     ];
 ```
 
@@ -243,6 +243,66 @@ Just bear in mind that if you use an API method in your preset method (for examp
     PostPresenter::make($post)->preset('summary')->only('id');
     // Will return ['id' => 1]
 ```
+
+#### `appends()`
+
+If you are presenting a paginated collection of resources you may want to add some additional key/value pairs to the outer array that wraps your data.  To do this, you can use the `appends()` method to specify the keys and values you wish to set.  Let's say you're presenting a custom paginator instance that produces this output:
+
+```php
+[
+    'current_page' => 1,
+    'data' => [
+        // your presented resources
+    ],
+    'first_page_url' => 'http://example.com/list?page=1',
+    'from' => 1,
+    'next_page_url' => null,
+    'path' => 'http://example.com/list',
+    'per_page' => 2,
+    'prev_page_url' => null,
+    'to' => 2,
+    'links' => [
+        'create' => 'some-url'
+    ]
+];
+```
+
+Using appends you are free to add (or overwrite) the keys in this array:
+
+```php
+$return = PostPresenter::collection($paginatedCollection)
+    ->only('id')
+    ->appends([
+        'foo' => 'bar',
+        'links' => [ 'store' => 'some-other-url' ]
+    ])
+    ->get();
+```
+
+This will now output:
+
+```php
+[
+    'current_page' => 1,
+    'data' => [
+        // your presented resources
+    ],
+    'first_page_url' => 'http://example.com/list?page=1',
+    'from' => 1,
+    'next_page_url' => null,
+    'path' => 'http://example.com/list',
+    'per_page' => 2,
+    'prev_page_url' => null,
+    'to' => 2,
+    'foo' => 'bar',
+    'links' => [
+        'create' => 'some-url',
+        'store' => 'some-other-url'
+    ]
+];
+```
+
+Note that appended values are merged recursively (as in the `links` example above).
 
 ### Returning values
 

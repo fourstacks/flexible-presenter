@@ -2,6 +2,7 @@
 
 namespace AdditionApps\FlexiblePresenter\Tests;
 
+use AdditionApps\FlexiblePresenter\Tests\Support\Paginators\CustomPaginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Pagination\Paginator;
@@ -290,13 +291,10 @@ class FlexiblePresenterTest extends TestCase
     /** @test */
     public function paginator_collection_of_models_are_presented()
     {
-        $currentPage = 1;
-        $perPage = 2;
-
         $posts = factory(Post::class, 3)->create();
 
         $paginationCollection = new Paginator(
-            $posts->forPage($currentPage, $perPage),
+            $posts->forPage($currentPage = 1, $perPage = 2),
             $perPage,
             $currentPage
         );
@@ -322,13 +320,10 @@ class FlexiblePresenterTest extends TestCase
     /** @test */
     public function length_aware_paginator_collection_of_models_are_presented()
     {
-        $currentPage = 1;
-        $perPage = 2;
-
         $posts = factory(Post::class, 3)->create();
 
         $paginationCollection = new LengthAwarePaginator(
-            $posts->forPage($currentPage, $perPage),
+            $posts->forPage($currentPage = 1, $perPage = 2),
             $posts->count(),
             $perPage,
             $currentPage
@@ -352,6 +347,82 @@ class FlexiblePresenterTest extends TestCase
             'prev_page_url' => null,
             'to' => 2,
             'total' => 3,
+        ], $return);
+    }
+
+    /** @test */
+    public function extra_key_value_pairs_are_appended_to_wrapped_presenter_when_keys_do_not_exist()
+    {
+        $posts = factory(Post::class, 3)->create();
+
+        $paginationCollection = new Paginator(
+            $posts->forPage($currentPage = 1, $perPage = 2),
+            $perPage,
+            $currentPage
+        );
+
+        $return = PostPresenter::collection($paginationCollection)
+            ->only('id')
+            ->appends(['foo' => 'bar', 'baz' => 'qux'])
+            ->get();
+
+        $this->assertEquals([
+            'current_page' => 1,
+            'data' => [
+                ['id' => 1],
+                ['id' => 2],
+            ],
+            'first_page_url' => '/?page=1',
+            'from' => 1,
+            'next_page_url' => null,
+            'path' => '/',
+            'per_page' => 2,
+            'prev_page_url' => null,
+            'to' => 2,
+            'foo' => 'bar',
+            'baz' => 'qux'
+        ], $return);
+    }
+
+    /** @test */
+    public function extra_key_value_pairs_are_appended_to_wrapped_presenter_recursively()
+    {
+        $posts = factory(Post::class, 3)->create();
+
+        $paginationCollection = new CustomPaginator(
+            $posts->forPage($currentPage = 1, $perPage = 2),
+            $perPage,
+            $currentPage
+        );
+
+        $return = PostPresenter::collection($paginationCollection)
+            ->only('id')
+            ->appends([
+                'foo' => [ 'test' => 'foo' ],
+                'links' => [ 'link_2' => 'bar' ]
+            ])
+            ->get();
+
+        $this->assertEquals([
+            'current_page' => 1,
+            'data' => [
+                ['id' => 1],
+                ['id' => 2],
+            ],
+            'first_page_url' => '/?page=1',
+            'from' => 1,
+            'next_page_url' => null,
+            'path' => '/',
+            'per_page' => 2,
+            'prev_page_url' => null,
+            'to' => 2,
+            'foo' => [
+                'test' => 'foo'
+            ],
+            'links' => [
+                'link_1' => 'foo',
+                'link_2' => 'bar'
+            ]
         ], $return);
     }
 
