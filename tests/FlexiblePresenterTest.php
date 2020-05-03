@@ -2,7 +2,6 @@
 
 namespace AdditionApps\FlexiblePresenter\Tests;
 
-use AdditionApps\FlexiblePresenter\Tests\Support\Paginators\CustomPaginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Pagination\Paginator;
@@ -12,6 +11,7 @@ use AdditionApps\FlexiblePresenter\Tests\Support\Models\Post;
 use AdditionApps\FlexiblePresenter\Tests\Support\Models\Comment;
 use AdditionApps\FlexiblePresenter\Exceptions\InvalidPresenterKeys;
 use AdditionApps\FlexiblePresenter\Tests\Support\Presenters\PostPresenter;
+use AdditionApps\FlexiblePresenter\Tests\Support\Paginators\CustomPaginator;
 use AdditionApps\FlexiblePresenter\Tests\Support\Presenters\CommentPresenter;
 use AdditionApps\FlexiblePresenter\Tests\Support\Presenters\StandalonePresenter;
 
@@ -380,7 +380,7 @@ class FlexiblePresenterTest extends TestCase
             'prev_page_url' => null,
             'to' => 2,
             'foo' => 'bar',
-            'baz' => 'qux'
+            'baz' => 'qux',
         ], $return);
     }
 
@@ -398,8 +398,8 @@ class FlexiblePresenterTest extends TestCase
         $return = PostPresenter::collection($paginationCollection)
             ->only('id')
             ->appends([
-                'foo' => [ 'test' => 'foo' ],
-                'links' => [ 'link_2' => 'bar' ]
+                'foo' => ['test' => 'foo'],
+                'links' => ['link_2' => 'bar'],
             ])
             ->get();
 
@@ -417,12 +417,12 @@ class FlexiblePresenterTest extends TestCase
             'prev_page_url' => null,
             'to' => 2,
             'foo' => [
-                'test' => 'foo'
+                'test' => 'foo',
             ],
             'links' => [
                 'link_1' => 'foo',
-                'link_2' => 'bar'
-            ]
+                'link_2' => 'bar',
+            ],
         ], $return);
     }
 

@@ -2,12 +2,11 @@
 
 namespace AdditionApps\FlexiblePresenter\Tests\Support\Paginators;
 
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Contracts\Support\Arrayable;
 
 class CustomPaginator extends Paginator implements Arrayable
 {
-
     public function toArray()
     {
         return [
@@ -21,8 +20,8 @@ class CustomPaginator extends Paginator implements Arrayable
             'prev_page_url' => $this->previousPageUrl(),
             'to' => $this->lastItem(),
             'links' => [
-                'link_1' => 'foo'
-            ]
+                'link_1' => 'foo',
+            ],
         ];
     }
 }
