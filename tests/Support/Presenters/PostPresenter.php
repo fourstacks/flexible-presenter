@@ -13,9 +13,9 @@ class PostPresenter extends FlexiblePresenter
             'title' => $this->title,
             'body' => $this->body,
             'published_at' => $this->published_at->toDateString(),
-            'comment_count' => function(){
+            'comment_count' => function () {
                 return $this->comments->count();
-            }
+            },
         ];
     }
 
