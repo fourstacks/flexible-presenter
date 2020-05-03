@@ -44,7 +44,6 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
     /** @var bool */
     protected $withoutResource = false;
 
-
     public function __construct($data = null)
     {
         if ($data instanceof NoSpecifiedResource) {
@@ -138,7 +137,8 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
         throw InvalidPresenterPreset::methodNotFound($method);
     }
 
-    public function appends(array $values = []){
+    public function appends(array $values = [])
+    {
         $this->appends = $values;
 
         return $this;
