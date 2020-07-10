@@ -4,21 +4,16 @@ namespace AdditionApps\FlexiblePresenter\Tests\Support\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Post extends Model
+class Image extends Model
 {
     protected $guarded = [];
     protected $dates = [
         'published_at',
     ];
 
-    public function comments()
+    public function posts()
     {
-        return $this->hasMany(Comment::class);
-    }
-
-    public function images()
-    {
-        return $this->belongsToMany(Image::class)
+        return $this->belongsToMany(Post::class)
             ->withPivot('test');
     }
 }

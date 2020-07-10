@@ -32,4 +32,13 @@ class PostPresenter extends FlexiblePresenter
             ];
         });
     }
+
+    public function presetPivotRelations()
+    {
+        return $this->with(function () {
+            return [
+                'images' => ImagePresenter::collection($this->whenLoaded('images')),
+            ];
+        });
+    }
 }

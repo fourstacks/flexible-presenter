@@ -57,5 +57,23 @@ abstract class TestCase extends Orchestra
                 $table->string('body')->nullable();
                 $table->timestamps();
             });
+
+        $app['db']
+            ->connection()
+            ->getSchemaBuilder()
+            ->create('images', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->string('url')->nullable();
+                $table->timestamps();
+            });
+
+        $app['db']
+            ->connection()
+            ->getSchemaBuilder()
+            ->create('image_post', function (Blueprint $table) {
+                $table->bigInteger('post_id')->nullable();
+                $table->bigInteger('image_id')->nullable();
+                $table->string('test')->nullable();
+            });
     }
 }
