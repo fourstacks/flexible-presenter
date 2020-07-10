@@ -123,7 +123,7 @@ The `make` method accepts a single resource as a parameter.  In the majority of 
 
 The `collection` method accepts an Eloquent collection (or a plain array) of resources as a parameter.  Each member of the collection will be transformed by the presenter as specified.  Again the members of that collection can be Eloquent models, other objects or arrays.
 
-As well as passing an Eloquent collection or array, you can also pass a Laravel paginator instance.  You are free to pass an instance of either `Illuminate\Pagination\Paginator` or `Illuminate\Pagination\LengthAwarePaginator`. You can also pass a custom paginator as long as it extends the `Illuminate\Pagination\AbstractPaginator` class and implements the `Illuminate\Contracts\SupportArrayable` interface.  
+As well as passing an Eloquent collection or array, you can also pass a Laravel paginator instance.  You are free to pass an instance of either `Illuminate\Pagination\Paginator` or `Illuminate\Pagination\LengthAwarePaginator`. You can also pass a custom paginator as long as it extends the `Illuminate\Pagination\AbstractPaginator` class and implements the `Illuminate\Contracts\Support\Arrayable` interface.  
 
 Here's an example of a presenter used with an eloquent collection using simple pagination: 
 
