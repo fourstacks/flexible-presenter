@@ -2,13 +2,13 @@
 
 namespace AdditionApps\FlexiblePresenter\Tests;
 
-use AdditionApps\FlexiblePresenter\Tests\Support\Models\Image;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Pagination\LengthAwarePaginator;
 use AdditionApps\FlexiblePresenter\FlexiblePresenter;
 use AdditionApps\FlexiblePresenter\Tests\Support\Models\Post;
+use AdditionApps\FlexiblePresenter\Tests\Support\Models\Image;
 use AdditionApps\FlexiblePresenter\Tests\Support\Models\Comment;
 use AdditionApps\FlexiblePresenter\Exceptions\InvalidPresenterKeys;
 use AdditionApps\FlexiblePresenter\Tests\Support\Presenters\PostPresenter;
@@ -476,8 +476,8 @@ class FlexiblePresenterTest extends TestCase
         $post = factory(Post::class)->create();
         $images = factory(Image::class, 3)->create();
 
-        $attachments = $images->mapWithKeys(function($image){
-            return [$image->id => ['test' => 'foo_' . $image->id]];
+        $attachments = $images->mapWithKeys(function ($image) {
+            return [$image->id => ['test' => 'foo_'.$image->id]];
         })->all();
         $post->images()->attach($attachments);
         $post->load('images');
@@ -488,18 +488,18 @@ class FlexiblePresenterTest extends TestCase
         $this->assertEquals([
             'id' => 1,
             'url' => 'foo',
-            'test' => 'foo_1'
-        ],$return['images'][0]);
+            'test' => 'foo_1',
+        ], $return['images'][0]);
         $this->assertEquals([
             'id' => 2,
             'url' => 'foo',
-            'test' => 'foo_2'
-        ],$return['images'][1]);
+            'test' => 'foo_2',
+        ], $return['images'][1]);
         $this->assertEquals([
             'id' => 3,
             'url' => 'foo',
-            'test' => 'foo_3'
-        ],$return['images'][2]);
+            'test' => 'foo_3',
+        ], $return['images'][2]);
     }
 
     private function createPostAndComments()

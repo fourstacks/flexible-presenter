@@ -11,7 +11,7 @@ class ImagePresenter extends FlexiblePresenter
         return [
             'id' => $this->id,
             'url' => $this->url,
-            'test' => $this->pivot->test
+            'test' => $this->pivot->test,
         ];
     }
 }
