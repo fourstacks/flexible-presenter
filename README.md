@@ -316,6 +316,84 @@ If you wish to return all the defined values in your presenter (without any conf
 
 Finally, all presenters implement the `Arrayable` interface so you are passing your presenter to a context that looks for this contract, your presenter values will be automatically converted to an array without you having to use `get()`.
 
+## Advanced usage
+
+### Using pivot data (Many to many relationship)
+
+This part demonstrate how to get pivot data from presenter. First, define two many to many relationship models, with pivot attribute `other_data`:
+
+```php
+class Post extends Model
+{
+    public function images()
+    {
+        return $this->belongsToMany(Image::class)
+            ->withPivot('other_data');
+    }
+}
+
+class Image extends Model
+{
+    public function posts()
+    {
+        return $this->belongsToMany(Post::class)
+            ->withPivot('other_data');
+    }
+}
+```
+
+Add `other_data` to `ImagePresenter` from pivot attribute:
+
+```php
+class ImagePresenter extends FlexiblePresenter
+{
+    public function values(): array
+    {
+        return [
+            // other attributes...
+            'other_data' => $this->pivot->other_data,
+        ];
+    }
+}
+```
+
+Load pivot relations `images` from `PostPresenter`:
+
+```php
+class PostPresenter extends FlexiblePresenter
+{
+    public function presetPivotRelations()
+    {
+        return $this->with(function () {
+            return [
+                'images' => ImagePresenter::collection($this->whenLoaded('images')),
+            ];
+        });
+    }
+}
+```
+
+Finally, get the pivot data from the `image`:
+
+```php
+$post = PostPresenter::make($post)->preset('pivotRelations')->get();
+
+// $post output:
+[
+    // other post attributes...
+    'images' => [
+        [
+            // other image attributes...
+            'other_data' => 'value...',
+        ],
+        [
+            // other image attributes...
+            'other_data' => 'value...',
+        ],
+    ],
+];
+```
+
 
 ## Changelog
 
