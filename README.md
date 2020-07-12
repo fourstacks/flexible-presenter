@@ -20,7 +20,28 @@ composer require additionapps/flexible-presenter
 
 ## Usage
 
-A presenter is a class in which you can define all the possible fields that you might want to expose to your Inertia views.  When you call the class from a controller method you can use methods such as `only` or `except` to define which of these fields you want to expose in that given context.  More on the API in a bit, for now, here's a simple presenter class:
+The package includes an artisan command to create a new presenter:
+
+```bash
+php artisan make:presenter PostsPresenter
+```
+
+This presenter will have the `App\Presenters` namespace and will be saved in `app/Presenters`.
+
+You can also specify a custom namespace, say, `App\Blog`
+
+```bash
+php artisan make:presenter "Blog/Presenters/PostsPresenter"
+```
+This presenter will have the `App\Blog\Presenters` namespace and will be saved in `app/Blog/Presenters`.
+
+### Defining values
+
+A presenter is a class in which you can define all the possible fields that you might want to expose to your Inertia views.  When you call the class from a controller method you can use methods such as `only` or `except` to define which of these fields you want to expose in that given context. More on the API in a bit.
+
+The only required method in a presenter class is `values()` which should return an array with **all** the possible fields you might want to display in a view.  These could simply be values directly on your model.  Note that you can access model properties directly from the `$this` variable, just as you can when using [Laravel API Resources](https://laravel.com/docs/eloquent-resources).
+
+For now, here's a simple presenter class:
 
 ```php
 class PostPresenter extends FlexiblePresenter
@@ -36,26 +57,19 @@ class PostPresenter extends FlexiblePresenter
 }
 ```
 
-### Making a new presenter
+Once the presenter is defined, can return to Inertia view or any you want to using it:
 
-The package includes an artisan command to create a new presenter:
-
-```bash
-php artisan make:presenter PostsPresenter
+```php
+class PostController extends Controller
+{
+    public function show(Post $post)
+    {
+        return Inertia::render('Posts/Show', [
+            'post' => PostPresenter::make($post)->get(),
+        ]);
+    }
+}
 ```
-
-This presenter will have the `App\Presenters` namespace and will be saved in `app/Presenters`.
-
-You can also specify a custom namespace, say, App\Blog
-
-```bash
-php artisan make:presenter "Blog/Presenters/PostsPresenter"
-```
-This presenter will have the App\Blog\Presenters namespace and will be saved in app/Blog/Presenters.
-
-### Defining values
-
-The only required method in a presenter class is `values()` which should return an array with **all** the possible fields you might want to display in a view.  These could simply be values directly on your model (as in the example above).  Note that you can access model properties directly from the `$this` variable, just as you can when using [Laravel API Resources](https://laravel.com/docs/6.x/eloquent-resources).
 
 ### Lazy evaluation
 
