@@ -136,7 +136,15 @@ public function values()
 
 #### `PostPresenter::collection($posts)`
 
-The `collection` method accepts an Eloquent collection (or a plain array) of resources as a parameter.  Each member of the collection will be transformed by the presenter as specified.  Again the members of that collection can be Eloquent models, other objects or arrays.
+The `collection` method accepts an Eloquent collection (or a plain array) of resources as a parameter.  Each member of the collection will be transformed by the presenter as specified.  Again the members of that collection can be Eloquent models, other objects or arrays:
+
+```php
+$posts = PostPresenter::collection(Post::all())
+    ->only('id', 'title')
+    ->get();
+```
+
+**Using Pagination**
 
 As well as passing an Eloquent collection or array, you can also pass a Laravel paginator instance.  You are free to pass an instance of either `Illuminate\Pagination\Paginator` or `Illuminate\Pagination\LengthAwarePaginator`. You can also pass a custom paginator as long as it extends the `Illuminate\Pagination\AbstractPaginator` class and implements the `Illuminate\Contracts\Support\Arrayable` interface.
 
