@@ -335,7 +335,11 @@ Once you've configured an instantiated presenter the way you want, you can get t
 PostPresenter::make($post)->only('id', 'title')->get();
 ```
 
-If you wish to return all the defined values in your presenter (without any configuration) then you can use the `all` method.
+If you wish to return all the defined values in your presenter (without any configuration) then you can use the `all` method, It will ignore the values ​​defined by `only()`, `except()`, `with()`:
+
+```php
+PostPresenter::make($post)->all();
+```
 
 Finally, all presenters implement the `Arrayable` interface so you are passing your presenter to a context that looks for this contract, your presenter values will be automatically converted to an array without you having to use `get()`.
 
