@@ -66,9 +66,9 @@ public function values()
 {
     return [
         'id' => $this->id,
-        'comment_count' => function(){
+        'comment_count' => function () {
             return $this->comments->count();
-        }
+        },
     ];
 }
 ```
@@ -77,7 +77,7 @@ If you are using PHP >= 7.4 you can make things a little more readable by using 
 
 ```php
 [
-    'comment_count' => fn() => $this->comments->count()
+    'comment_count' => fn() => $this->comments->count(),
 ];
 ```
 
@@ -92,9 +92,10 @@ public function values()
 {
     return [
         'id' => $this->id,
-        'comments' => function(){
-            return CommentPresenter::collection($this->comments)->except('body', 'updated_at');
-        }
+        'comments' => function () {
+            return CommentPresenter::collection($this->comments)
+                ->except('body', 'updated_at');
+        },
     ];
 }
 ```
@@ -114,7 +115,7 @@ public function values()
 {
     return [
         'id' => $this->resource['id'],
-        'title' => $this->resource['title']
+        'title' => $this->resource['title'],
     ];
 }
 ```
@@ -193,7 +194,7 @@ The `with` method accepts a closure that takes as it's only argument the resourc
 PostPresenter::make($post)->with(function($post){
     return [
         'title' => strtoupper($post->title),
-        'new_key' => 'Some value'
+        'new_key' => 'Some value',
     ];
 });
 ```
@@ -218,9 +219,9 @@ public function presetSummary()
 Your preset method should use the same presenter API methods above to build up a set of values.  Note that all of these API methods can be chained, so, for example, you can modify a preset on the fly if you wish:
 
 ```php
-PostPresenter::make($post)->preset('summary')->with(function(){
+PostPresenter::make($post)->preset('summary')->with(function () {
     return [
-        'comment_count' => $post->comments->count()
+        'comment_count' => $post->comments->count(),
     ];
 });
 ```
@@ -262,19 +263,19 @@ If you are presenting a paginated collection of resources you may want to add so
     'prev_page_url' => null,
     'to' => 2,
     'links' => [
-        'create' => 'some-url'
-    ]
+        'create' => 'some-url',
+    ],
 ];
 ```
 
 Using appends you are free to add (or overwrite) the keys in this array:
 
 ```php
-$return = PostPresenter::collection($paginatedCollection)
+$posts = PostPresenter::collection($paginatedCollection)
     ->only('id')
     ->appends([
         'foo' => 'bar',
-        'links' => [ 'store' => 'some-other-url' ]
+        'links' => ['store' => 'some-other-url'],
     ])
     ->get();
 ```
@@ -297,8 +298,8 @@ This will now output:
     'foo' => 'bar',
     'links' => [
         'create' => 'some-url',
-        'store' => 'some-other-url'
-    ]
+        'store' => 'some-other-url',
+    ],
 ];
 ```
 
