@@ -9,7 +9,7 @@ class DummyClass extends FlexiblePresenter
     public function values(): array
     {
         return [
-            // 'id' => $this->resource->id
+            // 'id' => $this->id,
         ];
     }
 }
