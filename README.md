@@ -226,7 +226,7 @@ PostPresenter::make($post)->preset('summary')->with(function () {
 });
 ```
 
-#### Caveat
+**Caveat: repeat call method**
 
 Just bear in mind that if you use an API method in your preset method (for example `only`) and then chain another `only` method onto it when using your presenter, that the last call to `only` will be the one to take effect:
 
