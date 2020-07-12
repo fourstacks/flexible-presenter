@@ -6,7 +6,7 @@
 
 **Easily define just the right data for your InertiaJS views (or anywhere else you want to, uh, flexibly present).**
 
-This package allows you to define presenter classes that take logic involved in getting data ready for your view layer out of your controller.  It also provides an expressive, fluent API that allows you to modify and reuse your presenters on the fly so that you're only ever providing relevant data.  
+This package allows you to define presenter classes that take logic involved in getting data ready for your view layer out of your controller.  It also provides an expressive, fluent API that allows you to modify and reuse your presenters on the fly so that you're only ever providing relevant data.
 
 This package was built specifically for use with [Inertia](https://inertiajs.com) (:heart_eyes:) because we didn't like the fact we were sending more data than we needed to our views.  That said, you're free to use it however you please - it's not dependant on Inertia in any way.
 
@@ -55,7 +55,7 @@ This presenter will have the App\Blog\Presenters namespace and will be saved in 
 
 ### Defining values
 
-The only required method in a presenter class is `values()` which should return an array with **all** the possible fields you might want to display in a view.  These could simply be values directly on your model (as in the example above).  Note that you can access model properties directly from the `$this` variable, just as you can when using [Laravel API Resources](https://laravel.com/docs/6.x/eloquent-resources). 
+The only required method in a presenter class is `values()` which should return an array with **all** the possible fields you might want to display in a view.  These could simply be values directly on your model (as in the example above).  Note that you can access model properties directly from the `$this` variable, just as you can when using [Laravel API Resources](https://laravel.com/docs/6.x/eloquent-resources).
 
 ### Lazy evaluation
 
@@ -81,7 +81,7 @@ If you are using PHP >= 7.4 you can make things a little more readable by using 
     ];
 ```
 
-Now if we call `PostPresenter::make($post)->only(['id'])` the `comment_count` value will not be evaluated meaning we do not need to worry about ensuring that relationship is loaded on the model.   
+Now if we call `PostPresenter::make($post)->only(['id'])` the `comment_count` value will not be evaluated meaning we do not need to worry about ensuring that relationship is loaded on the model.
 
 ### Nested presenters
 
@@ -123,9 +123,9 @@ The `make` method accepts a single resource as a parameter.  In the majority of 
 
 The `collection` method accepts an Eloquent collection (or a plain array) of resources as a parameter.  Each member of the collection will be transformed by the presenter as specified.  Again the members of that collection can be Eloquent models, other objects or arrays.
 
-As well as passing an Eloquent collection or array, you can also pass a Laravel paginator instance.  You are free to pass an instance of either `Illuminate\Pagination\Paginator` or `Illuminate\Pagination\LengthAwarePaginator`. You can also pass a custom paginator as long as it extends the `Illuminate\Pagination\AbstractPaginator` class and implements the `Illuminate\Contracts\Support\Arrayable` interface.  
+As well as passing an Eloquent collection or array, you can also pass a Laravel paginator instance.  You are free to pass an instance of either `Illuminate\Pagination\Paginator` or `Illuminate\Pagination\LengthAwarePaginator`. You can also pass a custom paginator as long as it extends the `Illuminate\Pagination\AbstractPaginator` class and implements the `Illuminate\Contracts\Support\Arrayable` interface.
 
-Here's an example of a presenter used with an eloquent collection using simple pagination: 
+Here's an example of a presenter used with an eloquent collection using simple pagination:
 
 ```php
 $posts = PostPresenter::collection(Post::simplePaginate())
@@ -211,7 +211,7 @@ Within your presenter class you should create a method with the name of your pre
 ```php
     public function presetSummary()
     {
-        return $this->only('title', 'published_at');  
+        return $this->only('title', 'published_at');
     }
 ```
 
@@ -235,7 +235,7 @@ Just bear in mind that if you use an API method in your preset method (for examp
     {
         return $this->only('title', 'body');
     }
-    
+
     // In Controller...
     PostPresenter::make($post)->preset('summary');
     // Will return ['title' => 'foo', 'body' => 'bar']
