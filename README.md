@@ -57,7 +57,7 @@ class PostPresenter extends FlexiblePresenter
 }
 ```
 
-Once the presenter is defined, can return to Inertia view or any you want to using it:
+Once a presenter is defined, you are free to return it as part of an InertiaJS response or in any other context that you need the presented data:
 
 ```php
 class PostController extends Controller
@@ -248,7 +248,7 @@ PostPresenter::make($post)->preset('summary')->with(function () {
 });
 ```
 
-**Caveat: repeat call method**
+**Caveat: repeated method calls**
 
 Just bear in mind that if you use an API method in your preset method (for example `only`) and then chain another `only` method onto it when using your presenter, that the last call to `only` will be the one to take effect:
 
@@ -335,7 +335,7 @@ Once you've configured an instantiated presenter the way you want, you can get t
 PostPresenter::make($post)->only('id', 'title')->get();
 ```
 
-If you wish to return all the defined values in your presenter (without any configuration) then you can use the `all` method, It will ignore the values ​​defined by `only()`, `except()`, `with()`:
+If you wish to return all the defined values in your presenter (without any configuration) then you can use the `all` method:
 
 ```php
 PostPresenter::make($post)->all();
