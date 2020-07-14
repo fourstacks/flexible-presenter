@@ -4,7 +4,7 @@
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/AdditionApps/flexible-presenter/Run%20tests?label=Tests)
 [![StyleCI](https://github.styleci.io/repos/243743103/shield?branch=master)](https://github.styleci.io/repos/243743103)
 
-**Easily define just the right data for your InertiaJS views (or anywhere else you want to, uh, flexibly present).**
+**Easily define just the right data for your Inertia views (or anywhere else you want to, uh, flexibly present).**
 
 This package allows you to define presenter classes that take logic involved in getting data ready for your view layer out of your controller.  It also provides an expressive, fluent API that allows you to modify and reuse your presenters on the fly so that you're only ever providing relevant data.
 
@@ -57,7 +57,7 @@ class PostPresenter extends FlexiblePresenter
 }
 ```
 
-Once a presenter is defined, you are free to return it as part of an InertiaJS response or in any other context that you need the presented data:
+Once a presenter is defined, you are free to return it as part of an Inertia response or in any other context that you need the presented data:
 
 ```php
 class PostController extends Controller
@@ -341,8 +341,26 @@ If you wish to return all the defined values in your presenter (without any conf
 PostPresenter::make($post)->all();
 ```
 
-Finally, all presenters implement the `Arrayable` interface so you are passing your presenter to a context that looks for this contract, your presenter values will be automatically converted to an array without you having to use `get()`.
+This is equivalent to the following:
 
+```php
+PostPresenter::make($post)->get();
+```
+
+Finally, all presenters implement the `Arrayable` interface, so you are passing your presenter to a context that looks for this contract, your presenter values will be automatically converted to an array without you having to use `get()` (or `all()`).  
+
+Here's an example using an Inertia response:
+
+```php
+return Inertia::render('Posts/Show', [
+    'post' => PostPresenter::make($post)->only('title'),
+]);
+```
+In the example above we're defining our Inertia props manually in an array.  You can also pass a presenter instance directly - it will be converted into an array of props automatically:
+
+```php
+return Inertia::render('Posts/Show', PostPresenter::make($post)->only('title'));
+```
 
 ## Changelog
 
