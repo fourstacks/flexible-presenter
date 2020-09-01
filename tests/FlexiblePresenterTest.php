@@ -149,17 +149,65 @@ class FlexiblePresenterTest extends TestCase
         $post = factory(Post::class)->create();
         $presenter = PostPresenter::make($post);
 
-        $usingStringsReturn = $presenter
+        $return = $presenter->only('id', 'title')->get();
+
+        $this->assertEquals([
+            'id' => $post->id,
+            'title' => $post->title,
+        ], $return);
+    }
+
+    /** @test */
+    public function only_given_keys_are_returned_when_presenting_resource_and_pass_array_arguments()
+    {
+        $post = factory(Post::class)->create();
+        $presenter = PostPresenter::make($post);
+
+        $return = $presenter->only(['title', 'body'])->get();
+
+        $this->assertEquals([
+            'title' => $post->title,
+            'body' => $post->body,
+        ], $return);
+    }
+
+    /** @test */
+    public function can_chain_only_method()
+    {
+        $post = factory(Post::class)->create();
+        $presenter = PostPresenter::make($post);
+
+        $return = $presenter
             ->only('id', 'title')
-            ->get();
-
-        $this->assertEquals(['id' => $post->id, 'title' => $post->title], $usingStringsReturn);
-
-        $usingArrayReturn = $presenter
             ->only(['title', 'body'])
             ->get();
 
-        $this->assertEquals(['title' => $post->title, 'body' => $post->body], $usingArrayReturn);
+        $this->assertEquals([
+            'id' => $post->id,
+            'title' => $post->title,
+            'body' => $post->body,
+        ], $return);
+    }
+
+    /** @test */
+    public function force_only_keys_are_returned_when_presenting_resource()
+    {
+        $post = factory(Post::class)->create();
+        $presenter = PostPresenter::make($post);
+
+        $usingStringsReturn = $presenter
+            ->only('id')
+            ->forceOnly('title')
+            ->get();
+
+        $this->assertEquals(['title' => $post->title], $usingStringsReturn);
+
+        $usingArrayReturn = $presenter
+            ->only(['title'])
+            ->forceOnly(['body'])
+            ->get();
+
+        $this->assertEquals(['body' => $post->body], $usingArrayReturn);
     }
 
     /** @test */
@@ -168,22 +216,72 @@ class FlexiblePresenterTest extends TestCase
         $post = factory(Post::class)->create();
         $presenter = PostPresenter::make($post);
 
-        $usingStringsReturn = $presenter
+        $return = $presenter
             ->except('body', 'published_at', 'comment_count')
             ->get();
 
         $this->assertEquals([
             'id' => $post->id,
             'title' => $post->title,
-        ], $usingStringsReturn);
+        ], $return);
+    }
 
-        $usingArrayReturn = $presenter
+    /** @test */
+    public function keys_except_those_given_are_returned_when_presenting_resource_and_pass_array_arguments()
+    {
+        $post = factory(Post::class)->create();
+        $presenter = PostPresenter::make($post);
+
+        $return = $presenter
             ->except(['id', 'title', 'comment_count'])
             ->get();
 
         $this->assertEquals([
             'body' => $post->body,
             'published_at' => $post->published_at->toDateString(),
+        ], $return);
+    }
+
+    /** @test */
+    public function can_chain_except_method()
+    {
+        $post = factory(Post::class)->create();
+        $presenter = PostPresenter::make($post);
+
+        $return = $presenter
+            ->except('body', 'published_at', 'comment_count')
+            ->except(['id', 'title', 'comment_count'])
+            ->get();
+
+        $this->assertEquals([], $return);
+    }
+
+    /** @test */
+    public function force_except_keys_those_given_are_returned_when_presenting_resource()
+    {
+        $post = factory(Post::class)->create();
+        $presenter = PostPresenter::make($post);
+
+        $usingStringsReturn = $presenter
+            ->except('comment_count')
+            ->forceExcept('body', 'published_at')
+            ->get();
+
+        $this->assertEquals([
+            'id' => $post->id,
+            'title' => $post->title,
+            'comment_count' => $post->comments->count(),
+        ], $usingStringsReturn);
+
+        $usingArrayReturn = $presenter
+            ->except(['comment_count'])
+            ->forceExcept(['id', 'title'])
+            ->get();
+
+        $this->assertEquals([
+            'body' => $post->body,
+            'published_at' => $post->published_at->toDateString(),
+            'comment_count' => $post->comments->count(),
         ], $usingArrayReturn);
     }
 

@@ -91,12 +91,30 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
 
     public function only(...$includes): self
     {
+        $this->only = array_merge(
+            $this->only, collect($includes)->flatten()->all()
+        );
+
+        return $this;
+    }
+
+    public function forceOnly(...$includes): self
+    {
         $this->only = collect($includes)->flatten()->all();
 
         return $this;
     }
 
     public function except(...$excludes): self
+    {
+        $this->except = array_merge(
+            $this->except, collect($excludes)->flatten()->all()
+        );
+
+        return $this;
+    }
+
+    public function forceExcept(...$excludes): self
     {
         $this->except = collect($excludes)->flatten()->all();
 
