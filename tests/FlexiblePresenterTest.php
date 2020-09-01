@@ -125,6 +125,34 @@ class FlexiblePresenterTest extends TestCase
     }
 
     /** @test */
+    public function can_use_chain_with_method_when_presenting_resource()
+    {
+        $post = $this->createPostAndComments();
+
+        $return = PostPresenter::make($post)
+            ->with(function ($post) {
+                return [
+                    'new_key_1' => 'foo',
+                    'new_key_2' => 'bar',
+                ];
+            })
+            ->with(function ($post) {
+                return ['new_key_2' => 'baz'];
+            })
+            ->get();
+
+        $this->assertEquals([
+            'id' => $post->id,
+            'title' => $post->title,
+            'body' => $post->body,
+            'published_at' => $post->published_at->toDateString(),
+            'comment_count' => 3,
+            'new_key_1' => 'foo',
+            'new_key_2' => 'baz',
+        ], $return);
+    }
+
+    /** @test */
     public function keys_are_overwritten_using_with_method_when_presenting_resource()
     {
         $post = $this->createPostAndComments();
@@ -141,6 +169,33 @@ class FlexiblePresenterTest extends TestCase
             'body' => $post->body,
             'published_at' => $post->published_at->toDayDateTimeString(),
             'comment_count' => 3,
+        ], $return);
+    }
+
+    /** @test */
+    public function can_chain_with_method()
+    {
+        $post = $this->createPostAndComments();
+
+        $return = CommentPresenter::collection($post->comments)
+            ->only('id')
+            ->with(function ($comment) {
+                return [
+                    'new_key_1' => 'foo',
+                    'new_key_2' => 'bar',
+                ];
+            })
+            ->with(function ($comment) {
+                return [
+                    'new_key_2' => 'baz',
+                ];
+            })
+            ->get();
+
+        $this->assertEquals([
+            ['id' => 1, 'new_key_1' => 'foo', 'new_key_2' => 'baz'],
+            ['id' => 2, 'new_key_1' => 'foo', 'new_key_2' => 'baz'],
+            ['id' => 3, 'new_key_1' => 'foo', 'new_key_2' => 'baz'],
         ], $return);
     }
 
