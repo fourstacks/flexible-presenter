@@ -163,6 +163,53 @@ class FlexiblePresenterTest extends TestCase
     }
 
     /** @test */
+    public function can_add_only_keys()
+    {
+        $post = factory(Post::class)->create();
+        $presenter = PostPresenter::make($post);
+
+        $return = $presenter
+            ->addOnly('id', 'title')
+            ->get();
+
+        $this->assertEquals(['id' => $post->id, 'title' => $post->title], $return);
+    }
+
+    /** @test */
+    public function can_add_only_keys_and_pass_array_arguments()
+    {
+        $post = factory(Post::class)->create();
+        $presenter = PostPresenter::make($post);
+
+        $return = $presenter
+            ->addOnly(['title', 'body'])
+            ->get();
+
+        $this->assertEquals(['title' => $post->title, 'body' => $post->body], $return);
+    }
+
+    /** @test */
+    public function can_chain_add_only_method()
+    {
+        $post = factory(Post::class)->create();
+        $presenter = PostPresenter::make($post);
+
+        $usingStringsReturn = $presenter
+            ->only('id')
+            ->addOnly('title')
+            ->get();
+
+        $this->assertEquals(['id' => $post->id, 'title' => $post->title], $usingStringsReturn);
+
+        $usingArrayReturn = $presenter
+            ->only(['title'])
+            ->addOnly(['body'])
+            ->get();
+
+        $this->assertEquals(['title' => $post->title, 'body' => $post->body], $usingArrayReturn);
+    }
+
+    /** @test */
     public function keys_except_those_given_are_returned_when_presenting_resource()
     {
         $post = factory(Post::class)->create();
@@ -179,6 +226,65 @@ class FlexiblePresenterTest extends TestCase
 
         $usingArrayReturn = $presenter
             ->except(['id', 'title', 'comment_count'])
+            ->get();
+
+        $this->assertEquals([
+            'body' => $post->body,
+            'published_at' => $post->published_at->toDateString(),
+        ], $usingArrayReturn);
+    }
+
+    /** @test */
+    public function can_add_except_keys()
+    {
+        $post = factory(Post::class)->create();
+        $presenter = PostPresenter::make($post);
+
+        $return = $presenter
+            ->addExcept('body', 'published_at', 'comment_count')
+            ->get();
+
+        $this->assertEquals([
+            'id' => $post->id,
+            'title' => $post->title,
+        ], $return);
+    }
+
+    /** @test */
+    public function can_add_except_keys_and_pass_array_arguments()
+    {
+        $post = factory(Post::class)->create();
+        $presenter = PostPresenter::make($post);
+
+        $return = $presenter
+            ->addExcept(['id', 'title', 'comment_count'])
+            ->get();
+
+        $this->assertEquals([
+            'body' => $post->body,
+            'published_at' => $post->published_at->toDateString(),
+        ], $return);
+    }
+
+    /** @test */
+    public function can_chain_add_except_method()
+    {
+        $post = factory(Post::class)->create();
+        $presenter = PostPresenter::make($post);
+
+        $usingStringsReturn = $presenter
+            ->except('body', 'published_at')
+            ->addExcept('comment_count')
+            ->get();
+
+        $this->assertEquals([
+            'id' => $post->id,
+            'title' => $post->title,
+        ], $usingStringsReturn);
+
+        $usingArrayReturn = $presenter
+            ->except(['id', 'title'])
+            ->addExcept(['comment_count'])
             ->get();
 
         $this->assertEquals([
