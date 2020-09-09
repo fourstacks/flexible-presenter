@@ -1,9 +1,18 @@
 <?php
 
-use AdditionApps\FlexiblePresenter\Tests\Support\Models\Comment;
+namespace AdditionApps\FlexiblePresenter\Tests\Support\Factories;
 
-$factory->define(Comment::class, function (Faker\Generator $faker) {
-    return [
-        'body' => 'bar',
-    ];
-});
+use AdditionApps\FlexiblePresenter\Tests\Support\Models\Comment;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class CommentFactory extends Factory
+{
+    protected $model = Comment::class;
+
+    public function definition()
+    {
+        return [
+            'body' => 'bar',
+        ];
+    }
+}

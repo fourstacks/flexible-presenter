@@ -28,7 +28,7 @@ class FlexiblePresenterTest extends TestCase
     /** @test */
     public function new_presenter_instance_instantiated_with_make_method()
     {
-        $post = factory(Post::class)->create();
+        $post = Post::factory()->create();
 
         $presenter = PostPresenter::make($post);
 
@@ -39,7 +39,7 @@ class FlexiblePresenterTest extends TestCase
     /** @test */
     public function new_presenter_instance_instantiated_with_collection_method()
     {
-        $post = factory(Post::class, 3)->create();
+        $post = Post::factory()->count(3)->create();
 
         $presenter = PostPresenter::collection($post);
 
@@ -65,7 +65,7 @@ class FlexiblePresenterTest extends TestCase
         $currentPage = 1;
         $perPage = 2;
 
-        $posts = factory(Post::class, 3)->create();
+        $posts = Post::factory()->count(3)->create();
 
         $paginationCollection = new Paginator(
             $posts->forPage($currentPage, $perPage),
@@ -86,7 +86,7 @@ class FlexiblePresenterTest extends TestCase
         $currentPage = 1;
         $perPage = 2;
 
-        $posts = factory(Post::class, 3)->create();
+        $posts = Post::factory()->count(3)->create();
 
         $paginationCollection = new LengthAwarePaginator(
             $posts->forPage($currentPage, $perPage),
@@ -146,7 +146,7 @@ class FlexiblePresenterTest extends TestCase
     /** @test */
     public function only_given_keys_are_returned_when_presenting_resource()
     {
-        $post = factory(Post::class)->create();
+        $post = Post::factory()->create();
         $presenter = PostPresenter::make($post);
 
         $usingStringsReturn = $presenter
@@ -165,7 +165,7 @@ class FlexiblePresenterTest extends TestCase
     /** @test */
     public function keys_except_those_given_are_returned_when_presenting_resource()
     {
-        $post = factory(Post::class)->create();
+        $post = Post::factory()->create();
         $presenter = PostPresenter::make($post);
 
         $usingStringsReturn = $presenter
@@ -247,7 +247,7 @@ class FlexiblePresenterTest extends TestCase
     /** @test */
     public function only_keys_for_preset_are_returned()
     {
-        $post = factory(Post::class)->create();
+        $post = Post::factory()->create();
 
         $return = PostPresenter::make($post)->preset('summary')->get();
 
@@ -262,7 +262,7 @@ class FlexiblePresenterTest extends TestCase
     {
         $this->expectException(InvalidPresenterKeys::class);
 
-        $post = factory(Post::class)->create();
+        $post = Post::factory()->create();
 
         PostPresenter::make($post)->only('bad_key')->get();
     }
@@ -272,7 +272,7 @@ class FlexiblePresenterTest extends TestCase
     {
         $this->expectException(InvalidPresenterKeys::class);
 
-        $post = factory(Post::class)->create();
+        $post = Post::factory()->create();
 
         PostPresenter::make($post)->except('bad_key')->get();
     }
@@ -280,7 +280,7 @@ class FlexiblePresenterTest extends TestCase
     /** @test */
     public function collection_of_models_are_presented()
     {
-        $posts = factory(Post::class, 3)->create();
+        $posts = Post::factory()->count(3)->create();
 
         $return = PostPresenter::collection($posts)->only('id')->get();
 
@@ -292,7 +292,7 @@ class FlexiblePresenterTest extends TestCase
     /** @test */
     public function paginator_collection_of_models_are_presented()
     {
-        $posts = factory(Post::class, 3)->create();
+        $posts = Post::factory()->count(3)->create();
 
         $paginationCollection = new Paginator(
             $posts->forPage($currentPage = 1, $perPage = 2),
@@ -321,7 +321,7 @@ class FlexiblePresenterTest extends TestCase
     /** @test */
     public function length_aware_paginator_collection_of_models_are_presented()
     {
-        $posts = factory(Post::class, 3)->create();
+        $posts = Post::factory()->count(3)->create();
 
         $paginationCollection = new LengthAwarePaginator(
             $posts->forPage($currentPage = 1, $perPage = 2),
@@ -354,7 +354,7 @@ class FlexiblePresenterTest extends TestCase
     /** @test */
     public function extra_key_value_pairs_are_appended_to_wrapped_presenter_when_keys_do_not_exist()
     {
-        $posts = factory(Post::class, 3)->create();
+        $posts = Post::factory()->count(3)->create();
 
         $paginationCollection = new Paginator(
             $posts->forPage($currentPage = 1, $perPage = 2),
@@ -388,7 +388,7 @@ class FlexiblePresenterTest extends TestCase
     /** @test */
     public function extra_key_value_pairs_are_appended_to_wrapped_presenter_recursively()
     {
-        $posts = factory(Post::class, 3)->create();
+        $posts = Post::factory()->count(3)->create();
 
         $paginationCollection = new CustomPaginator(
             $posts->forPage($currentPage = 1, $perPage = 2),
@@ -451,7 +451,7 @@ class FlexiblePresenterTest extends TestCase
     /** @test */
     public function returns_null_if_relation_not_loaded_on_resource()
     {
-        $post = factory(Post::class)->create();
+        $post = Post::factory()->create();
 
         $return = PostPresenter::make($post)->preset('conditionalRelations')->get();
 
@@ -473,8 +473,8 @@ class FlexiblePresenterTest extends TestCase
     /** @test */
     public function can_use_pivot_data_on_nested_presenter_resource()
     {
-        $post = factory(Post::class)->create();
-        $images = factory(Image::class, 3)->create();
+        $post = Post::factory()->create();
+        $images = Image::factory()->count(3)->create();
 
         $attachments = $images->mapWithKeys(function ($image) {
             return [$image->id => ['test' => 'foo_'.$image->id]];
@@ -504,8 +504,8 @@ class FlexiblePresenterTest extends TestCase
 
     private function createPostAndComments()
     {
-        $post = factory(Post::class)->create();
-        factory(Comment::class, 3)->create(['post_id' => $post->id]);
+        $post = Post::factory()->create();
+        Comment::factory()->count(3)->create(['post_id' => $post->id]);
 
         return $post;
     }
