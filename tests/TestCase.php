@@ -2,9 +2,7 @@
 
 namespace AdditionApps\FlexiblePresenter\Tests;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Str;
 use Orchestra\Testbench\TestCase as Orchestra;
 use AdditionApps\FlexiblePresenter\FlexiblePresenterServiceProvider;
 
@@ -16,18 +14,8 @@ abstract class TestCase extends Orchestra
     {
         parent::setUp();
         $this->basePath = realpath(__DIR__.'/..');
+        $this->withFactories($this->basePath.'/tests/Support/Factories');
         $this->setUpDatabase($this->app);
-
-        Factory::guessFactoryNamesUsing(function (string $modelName) {
-            $namespace = 'AdditionApps\\FlexiblePresenter\\Tests\\Support\\Factories';
-
-            $modelName = Str::after(
-                $modelName,
-                'AdditionApps\\FlexiblePresenter\\Tests\\Support\\Models'
-            );
-
-            return $namespace.$modelName.'Factory';
-        });
     }
 
     protected function getPackageProviders($app): array
