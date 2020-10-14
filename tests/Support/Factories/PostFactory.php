@@ -1,7 +1,7 @@
 <?php
 
-use AdditionApps\FlexiblePresenter\Tests\Support\Models\Post;
 use Illuminate\Support\Carbon;
+use AdditionApps\FlexiblePresenter\Tests\Support\Models\Post;
 
 $factory->define(Post::class, function (Faker\Generator $faker) {
     return [
