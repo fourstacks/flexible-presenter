@@ -2,6 +2,7 @@
 
 namespace AdditionApps\FlexiblePresenter\Tests;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Pagination\Paginator;
@@ -332,23 +333,22 @@ class FlexiblePresenterTest extends TestCase
 
         $return = PostPresenter::collection($paginationCollection)->only('id')->get();
 
+        $this->assertEquals(1, Arr::get($return, 'current_page'));
         $this->assertEquals([
-            'current_page' => 1,
-            'data' => [
-                ['id' => 1],
-                ['id' => 2],
-            ],
-            'first_page_url' => '/?page=1',
-            'from' => 1,
-            'last_page' => 2,
-            'last_page_url' => '/?page=2',
-            'next_page_url' => '/?page=2',
-            'path' => '/',
-            'per_page' => 2,
-            'prev_page_url' => null,
-            'to' => 2,
-            'total' => 3,
-        ], $return);
+            ['id' => 1],
+            ['id' => 2],
+        ], Arr::get($return, 'data'));
+        $this->assertEquals('/?page=1', Arr::get($return, 'first_page_url'));
+        $this->assertEquals(1, Arr::get($return, 'from'));
+        $this->assertEquals(2, Arr::get($return, 'last_page'));
+        $this->assertEquals('/?page=2', Arr::get($return, 'last_page_url'));
+        $this->assertEquals('/?page=2', Arr::get($return, 'next_page_url'));
+        $this->assertEquals('/', Arr::get($return, 'path'));
+        $this->assertEquals('/', Arr::get($return, 'path'));
+        $this->assertEquals(2, Arr::get($return, 'per_page'));
+        $this->assertEquals(null, Arr::get($return, 'prev_page_url'));
+        $this->assertEquals(2, Arr::get($return, 'to'));
+        $this->assertEquals(3, Arr::get($return, 'total'));
     }
 
     /** @test */
