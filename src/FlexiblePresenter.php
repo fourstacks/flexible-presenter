@@ -38,8 +38,8 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
     /** @var array */
     public $appends = [];
 
-    /** @var callable|null */
-    protected $withCallback;
+    /** @var array|callable[] */
+    protected $withCallback = [];
 
     /** @var bool */
     protected $withoutResource = false;
@@ -81,9 +81,9 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
     public function with(callable $callback): self
     {
         if ($this->resource) {
-            $this->with = $callback($this->resource);
+            $this->with = array_merge($this->with, $callback($this->resource));
         } else {
-            $this->withCallback = $callback;
+            $this->withCallback[] = $callback;
         }
 
         return $this;
@@ -229,8 +229,10 @@ abstract class FlexiblePresenter implements FlexiblePresenterContract, Arrayable
             $presenter = new static($resource);
             $presenter->only = $this->only;
             $presenter->except = $this->except;
-            if ($this->withCallback) {
-                $presenter->with($this->withCallback);
+            if (count($this->withCallback)) {
+                foreach ($this->withCallback as $callable) {
+                    $presenter->with($callable);
+                }
             }
 
             return $presenter->get();
