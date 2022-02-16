@@ -15,7 +15,7 @@ This package was built specifically for use with [Inertia](https://inertiajs.com
 You can install the package via composer:
 
 ```bash
-composer require additionapps/flexible-presenter
+composer require fourstacks/flexible-presenter
 ```
 
 ## Usage
