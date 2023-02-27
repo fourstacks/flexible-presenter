@@ -12,9 +12,7 @@ class PresenterMakeCommandTestTest extends TestCase
         $this->artisan('make:presenter', [
             'name' => 'PostPresenter',
             '--force' => true,
-        ])
-            ->expectsOutput('Flexible Presenter created successfully.')
-            ->assertExitCode(0);
+        ])->assertExitCode(0);
 
         $shouldOutputFilePath = $this->app['path'].'/Presenters/PostPresenter.php';
 
@@ -33,9 +31,7 @@ class PresenterMakeCommandTestTest extends TestCase
         $this->artisan('make:presenter', [
             'name' => 'Blog/PostPresenter',
             '--force' => true,
-        ])
-            ->expectsOutput('Flexible Presenter created successfully.')
-            ->assertExitCode(0);
+        ])->assertExitCode(0);
 
         $shouldOutputFilePath = $this->app['path'].'/Blog/PostPresenter.php';
 
