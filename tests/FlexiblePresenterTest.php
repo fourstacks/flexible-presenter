@@ -258,7 +258,7 @@ class FlexiblePresenterTest extends TestCase
 
         $presenter->only('id')->get();
 
-        $this->assertCount(0, count(DB::getQueryLog()));
+        $this->assertCount(0, DB::getQueryLog());
 
         DB::flushQueryLog();
 
@@ -269,7 +269,7 @@ class FlexiblePresenterTest extends TestCase
 
         $presenter->only('id', 'comment_count')->get();
 
-        $this->assertCount(1, count(DB::getQueryLog()));
+        $this->assertCount(1, DB::getQueryLog());
 
         DB::flushQueryLog();
     }
