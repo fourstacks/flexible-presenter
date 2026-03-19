@@ -10,6 +10,8 @@ abstract class TestCase extends Orchestra
 {
     protected $basePath;
 
+    protected static $latestResponse;
+
     public function setUp(): void
     {
         parent::setUp();

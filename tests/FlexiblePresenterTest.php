@@ -20,7 +20,7 @@ use AdditionApps\FlexiblePresenter\Tests\Support\Presenters\StandalonePresenter;
 
 class FlexiblePresenterTest extends TestCase
 {
-    protected function setUp(): void
+    public function setUp(): void
     {
         parent::setUp();
 
