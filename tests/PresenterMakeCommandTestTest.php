@@ -3,10 +3,11 @@
 namespace AdditionApps\FlexiblePresenter\Tests;
 
 use Illuminate\Support\Facades\File;
+use PHPUnit\Framework\Attributes\Test;
 
 class PresenterMakeCommandTestTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_create_a_presenter_class()
     {
         $this->artisan('make:presenter', [
@@ -25,7 +26,7 @@ class PresenterMakeCommandTestTest extends TestCase
         $this->assertStringContainsString('class PostPresenter extends FlexiblePresenter', $contents);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_create_a_view_model_with_a_custom_namespace()
     {
         $this->artisan('make:presenter', [
