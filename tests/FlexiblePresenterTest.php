@@ -2,6 +2,7 @@
 
 namespace AdditionApps\FlexiblePresenter\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -26,7 +27,7 @@ class FlexiblePresenterTest extends TestCase
         Carbon::setTestNow('01/01/2020 13:00:00');
     }
 
-    /** @test */
+    #[Test]
     public function new_presenter_instance_instantiated_with_make_method()
     {
         $post = factory(Post::class)->create();
@@ -37,7 +38,7 @@ class FlexiblePresenterTest extends TestCase
         $this->assertEquals($presenter->resource->id, $post->id);
     }
 
-    /** @test */
+    #[Test]
     public function new_presenter_instance_instantiated_with_collection_method()
     {
         $post = factory(Post::class, 3)->create();
@@ -48,7 +49,7 @@ class FlexiblePresenterTest extends TestCase
         $this->assertCount(3, $presenter->collection);
     }
 
-    /** @test */
+    #[Test]
     public function new_presenter_instance_instantiated_with_new_method()
     {
         $presenter = StandalonePresenter::new();
@@ -60,7 +61,7 @@ class FlexiblePresenterTest extends TestCase
         $this->assertEquals(['foo' => 'bar'], $presenter->toArray());
     }
 
-    /** @test */
+    #[Test]
     public function new_presenter_instance_instantiated_input_paginator()
     {
         $currentPage = 1;
@@ -81,7 +82,7 @@ class FlexiblePresenterTest extends TestCase
         $this->assertCount(2, $presenter->paginationCollection->getCollection());
     }
 
-    /** @test */
+    #[Test]
     public function new_presenter_instance_instantiated_input_length_aware_paginator()
     {
         $currentPage = 1;
@@ -103,7 +104,7 @@ class FlexiblePresenterTest extends TestCase
         $this->assertCount(2, $presenter->paginationCollection->getCollection());
     }
 
-    /** @test */
+    #[Test]
     public function new_keys_can_be_added_using_with_method_when_presenting_resource()
     {
         $post = $this->createPostAndComments();
@@ -124,7 +125,7 @@ class FlexiblePresenterTest extends TestCase
         ], $return);
     }
 
-    /** @test */
+    #[Test]
     public function can_use_chain_with_method_when_presenting_resource()
     {
         $post = $this->createPostAndComments();
@@ -152,7 +153,7 @@ class FlexiblePresenterTest extends TestCase
         ], $return);
     }
 
-    /** @test */
+    #[Test]
     public function keys_are_overwritten_using_with_method_when_presenting_resource()
     {
         $post = $this->createPostAndComments();
@@ -172,7 +173,7 @@ class FlexiblePresenterTest extends TestCase
         ], $return);
     }
 
-    /** @test */
+    #[Test]
     public function can_chain_with_method()
     {
         $post = $this->createPostAndComments();
@@ -199,7 +200,7 @@ class FlexiblePresenterTest extends TestCase
         ], $return);
     }
 
-    /** @test */
+    #[Test]
     public function only_given_keys_are_returned_when_presenting_resource()
     {
         $post = factory(Post::class)->create();
@@ -218,7 +219,7 @@ class FlexiblePresenterTest extends TestCase
         $this->assertEquals(['title' => $post->title, 'body' => $post->body], $usingArrayReturn);
     }
 
-    /** @test */
+    #[Test]
     public function keys_except_those_given_are_returned_when_presenting_resource()
     {
         $post = factory(Post::class)->create();
@@ -272,7 +273,7 @@ class FlexiblePresenterTest extends TestCase
         DB::flushQueryLog();
     }
 
-    /** @test */
+    #[Test]
     public function all_keys_are_returned_for_resource()
     {
         $post = $this->createPostAndComments();
@@ -288,7 +289,7 @@ class FlexiblePresenterTest extends TestCase
         ], $return);
     }
 
-    /** @test */
+    #[Test]
     public function null_returned_when_no_resource_passed_to_constructor()
     {
         $makeReturn = PostPresenter::make(null)->get();
@@ -300,7 +301,7 @@ class FlexiblePresenterTest extends TestCase
         $this->assertNull($collectionReturn);
     }
 
-    /** @test */
+    #[Test]
     public function only_keys_for_preset_are_returned()
     {
         $post = factory(Post::class)->create();
@@ -313,7 +314,7 @@ class FlexiblePresenterTest extends TestCase
         ], $return);
     }
 
-    /** @test */
+    #[Test]
     public function invalid_keys_given_to_only_method_trigger_exception()
     {
         $this->expectException(InvalidPresenterKeys::class);
@@ -323,7 +324,7 @@ class FlexiblePresenterTest extends TestCase
         PostPresenter::make($post)->only('bad_key')->get();
     }
 
-    /** @test */
+    #[Test]
     public function invalid_keys_given_to_except_method_trigger_exception()
     {
         $this->expectException(InvalidPresenterKeys::class);
@@ -333,7 +334,7 @@ class FlexiblePresenterTest extends TestCase
         PostPresenter::make($post)->except('bad_key')->get();
     }
 
-    /** @test */
+    #[Test]
     public function collection_of_models_are_presented()
     {
         $posts = factory(Post::class, 3)->create();
@@ -345,7 +346,7 @@ class FlexiblePresenterTest extends TestCase
         ], $return);
     }
 
-    /** @test */
+    #[Test]
     public function paginator_collection_of_models_are_presented()
     {
         $posts = factory(Post::class, 3)->create();
@@ -371,10 +372,11 @@ class FlexiblePresenterTest extends TestCase
             'per_page' => 2,
             'prev_page_url' => null,
             'to' => 2,
+            'current_page_url' => '/?page=1'
         ], $return);
     }
 
-    /** @test */
+    #[Test]
     public function length_aware_paginator_collection_of_models_are_presented()
     {
         $posts = factory(Post::class, 3)->create();
@@ -406,7 +408,7 @@ class FlexiblePresenterTest extends TestCase
         $this->assertEquals(3, Arr::get($return, 'total'));
     }
 
-    /** @test */
+    #[Test]
     public function extra_key_value_pairs_are_appended_to_wrapped_presenter_when_keys_do_not_exist()
     {
         $posts = factory(Post::class, 3)->create();
@@ -437,10 +439,11 @@ class FlexiblePresenterTest extends TestCase
             'to' => 2,
             'foo' => 'bar',
             'baz' => 'qux',
+            'current_page_url' => '/?page=1'
         ], $return);
     }
 
-    /** @test */
+    #[Test]
     public function extra_key_value_pairs_are_appended_to_wrapped_presenter_recursively()
     {
         $posts = factory(Post::class, 3)->create();
@@ -482,7 +485,7 @@ class FlexiblePresenterTest extends TestCase
         ], $return);
     }
 
-    /** @test */
+    #[Test]
     public function another_presenter_can_be_used_as_a_value_when_presenting_resource()
     {
         $post = $this->createPostAndComments();
@@ -503,7 +506,7 @@ class FlexiblePresenterTest extends TestCase
         ], $return);
     }
 
-    /** @test */
+    #[Test]
     public function returns_null_if_relation_not_loaded_on_resource()
     {
         $post = factory(Post::class)->create();
@@ -513,7 +516,7 @@ class FlexiblePresenterTest extends TestCase
         $this->assertNull($return['comments']);
     }
 
-    /** @test */
+    #[Test]
     public function returns_presented_relation_if_loaded_on_resource()
     {
         $post = $this->createPostAndComments();
@@ -525,7 +528,7 @@ class FlexiblePresenterTest extends TestCase
         $this->assertCount(3, $return['comments']);
     }
 
-    /** @test */
+    #[Test]
     public function can_use_pivot_data_on_nested_presenter_resource()
     {
         $post = factory(Post::class)->create();
