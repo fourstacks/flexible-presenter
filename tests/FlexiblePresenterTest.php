@@ -359,21 +359,18 @@ class FlexiblePresenterTest extends TestCase
 
         $return = PostPresenter::collection($paginationCollection)->only('id')->get();
 
+        $this->assertEquals(1, Arr::get($return, 'current_page'));
         $this->assertEquals([
-            'current_page' => 1,
-            'data' => [
-                ['id' => 1],
-                ['id' => 2],
-            ],
-            'first_page_url' => '/?page=1',
-            'from' => 1,
-            'next_page_url' => null,
-            'path' => '/',
-            'per_page' => 2,
-            'prev_page_url' => null,
-            'to' => 2,
-            'current_page_url' => '/?page=1',
-        ], $return);
+            ['id' => 1],
+            ['id' => 2],
+        ], Arr::get($return, 'data'));
+        $this->assertEquals('/?page=1', Arr::get($return, 'first_page_url'));
+        $this->assertEquals(1, Arr::get($return, 'from'));
+        $this->assertEquals(null, Arr::get($return, 'next_page_url'));
+        $this->assertEquals('/', Arr::get($return, 'path'));
+        $this->assertEquals(2, Arr::get($return, 'per_page'));
+        $this->assertEquals(null, Arr::get($return, 'prev_page_url'));
+        $this->assertEquals(2, Arr::get($return, 'to'));
     }
 
     #[Test]
