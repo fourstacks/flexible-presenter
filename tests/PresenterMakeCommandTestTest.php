@@ -2,8 +2,8 @@
 
 namespace AdditionApps\FlexiblePresenter\Tests;
 
-use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Support\Facades\File;
+use PHPUnit\Framework\Attributes\Test;
 
 class PresenterMakeCommandTestTest extends TestCase
 {

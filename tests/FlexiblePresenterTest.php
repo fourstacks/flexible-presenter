@@ -2,11 +2,11 @@
 
 namespace AdditionApps\FlexiblePresenter\Tests;
 
-use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Pagination\Paginator;
+use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Pagination\LengthAwarePaginator;
 use AdditionApps\FlexiblePresenter\FlexiblePresenter;
 use AdditionApps\FlexiblePresenter\Tests\Support\Models\Post;
@@ -372,7 +372,7 @@ class FlexiblePresenterTest extends TestCase
             'per_page' => 2,
             'prev_page_url' => null,
             'to' => 2,
-            'current_page_url' => '/?page=1'
+            'current_page_url' => '/?page=1',
         ], $return);
     }
 
@@ -439,7 +439,7 @@ class FlexiblePresenterTest extends TestCase
             'to' => 2,
             'foo' => 'bar',
             'baz' => 'qux',
-            'current_page_url' => '/?page=1'
+            'current_page_url' => '/?page=1',
         ], $return);
     }
 
