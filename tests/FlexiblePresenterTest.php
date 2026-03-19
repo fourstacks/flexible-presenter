@@ -244,6 +244,7 @@ class FlexiblePresenterTest extends TestCase
         ], $usingArrayReturn);
     }
 
+    #[Test]
     public function lazy_keys_are_not_evaluated_unless_requested()
     {
         $post = $this->createPostAndComments();
